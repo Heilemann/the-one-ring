@@ -1,0 +1,121 @@
+{
+	"name": "The One Ring",
+	"version": "0.1.0",
+	"author": "Michael Heilemann",
+	"description": "The One Ring RPG reference game system implementation.",
+	"code": "dist/index.html",
+	"grid": {
+		"type": "square",
+		"size": 1,
+		"unitSize": 70,
+		"unit": "px"
+	},
+	"assetsPath": "build/static/media/",
+	"logoPath": "build/static/media/logo.png",
+	"coverPath": "build/static/media/cover.jpg",
+	"collections": [
+		{
+			"type": "character",
+			"singularName": "Hero",
+			"pluralName": "Heroes",
+			"description": "A player hero.",
+			"hasEditMode": "false",
+			"windowSize": "large",
+			"thumbnailField": [
+				"portrait",
+				"token"
+			],
+			"allowCreate": "true",
+			"canAssumeAsCharacter": "true"
+		},
+		{
+			"type": "note",
+			"singularName": "Note",
+			"pluralName": "Notes",
+			"description": "For simple note taking.",
+			"hasEditMode": "true",
+			"windowSize": "medium",
+			"allowCreate": "true",
+			"canAssumeAsCharacter": "false"
+		},
+		{
+			"type": "weapon",
+			"singularName": "Weapon",
+			"pluralName": "Weapons",
+			"description": "Various weapons used in Middle-earth.",
+			"hasEditMode": "true",
+			"windowSize": "small",
+			"allowCreate": "false",
+			"canAssumeAsCharacter": "false"
+		},
+		{
+			"type": "item",
+			"singularName": "Item",
+			"pluralName": "Items",
+			"description": "Equipment, treasures, and other items.",
+			"hasEditMode": "true",
+			"windowSize": "small",
+			"allowCreate": "false",
+			"thumbnailField": [
+				"image"
+			],
+			"canAssumeAsCharacter": "false"
+		},
+		{
+			"type": "handout",
+			"singularName": "Handout",
+			"pluralName": "Handouts",
+			"description": "Lore, maps, and other handouts.",
+			"hasEditMode": "true",
+			"windowSize": "medium",
+			"allowCreate": "true",
+			"thumbnailField": [
+				"image"
+			],
+			"canAssumeAsCharacter": "false"
+		},
+		{
+			"type": "effect",
+			"singularName": "Effect",
+			"pluralName": "Effects",
+			"description": "Various effects and conditions.",
+			"hasEditMode": "true",
+			"windowSize": "small",
+			"allowCreate": "true",
+			"canAssumeAsCharacter": "false"
+		},
+		{
+			"type": "equipment",
+			"singularName": "Equipment",
+			"pluralName": "Equipment",
+			"description": "General equipment and gear.",
+			"hasEditMode": "true",
+			"windowSize": "small",
+			"allowCreate": "true",
+			"canAssumeAsCharacter": "false"
+		}
+	],
+	"chatMessageTypes": [
+		{
+			"type": "dice"
+		}
+	],
+	"diceConfig": [
+		{
+			"label": "D6",
+			"notation": "1d6"
+		},
+		{
+			"label": "D12",
+			"notation": "1d12"
+		},
+		{
+			"label": "Feat Die",
+			"notation": "1d12"
+		},
+		{
+			"label": "Success Die",
+			"notation": "1d6"
+		}
+	]
+}
