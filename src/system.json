@@ -10,9 +10,9 @@
 		"unitSize": 70,
 		"unit": "px"
 	},
-	"assetsPath": "build/static/media/",
-	"logoPath": "build/static/media/logo.png",
-	"coverPath": "build/static/media/cover.jpg",
+	"assetsPath": "dist/static/media/",
+	"logoPath": "dist/static/media/logo.png",
+	"coverPath": "dist/static/media/cover.jpg",
 	"collections": [
 		{
 			"type": "character",
