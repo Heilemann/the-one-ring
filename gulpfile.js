@@ -1,6 +1,8 @@
-import { dest, series, src } from 'gulp'
-import inlinesource from 'gulp-inline-source'
+import gulp from 'gulp'
+import inline from 'gulp-inline'
 import replace from 'gulp-replace'
+
+const { src, series, dest } = gulp
 
 const cleanUp = () => {
 	return src('./dist/*.html')
@@ -11,30 +13,24 @@ const cleanUp = () => {
 }
 
 const inlineScriptsAndCSS = () => {
-	const regex = /<script.*<\/script>/g
-	return src('./dist/*.html')
-		.pipe(
-			replace(regex, function replace(match, offset, string) {
-				const newString = string
-					.replace(match, '')
-					.replace('</body></html>', match + '</body></html>')
-				return newString
-			}),
-		)
-		.pipe(replace('.js"></script>', '.js" inline></script>'))
-		.pipe(replace('rel="stylesheet">', 'rel="stylesheet" inline>'))
-		.pipe(
-			inlinesource({
-				compress: false,
-				rootpath: './dist',
-			}),
-		)
-		.pipe(dest('./dist'))
+	return (
+		src('./dist/*.html')
+			// Adjust paths to be relative (remove leading slashes)
+			.pipe(replace(/(src|href)="\/(.*?)"/g, '$1="$2"'))
+			// Inline scripts and styles
+			.pipe(
+				inline({
+					base: './dist/',
+					disabledTypes: ['svg', 'img'], // Only inline scripts and css
+				}),
+			)
+			.pipe(dest('./dist'))
+	)
 }
 
 const renameAssetsPaths = () => {
 	return src('./dist/index.html')
-		.pipe(replace('assets/', 'files/'))
+		.pipe(replace('static/media/', 'files/'))
 		.pipe(dest('./dist'))
 }
 
