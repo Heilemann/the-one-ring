@@ -3,7 +3,8 @@
 import _ from 'lodash'
 import { MutableRefObject, useCallback, useContext, useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { TSystemReceivableMessages, TValues } from '../../../interfaces'
+import { TValues } from '../../../interfaces/interfaces'
+import { TSystemReceivableMessages } from '../../../interfaces/postMessages'
 import context from '../context'
 
 type Props = {
@@ -30,7 +31,7 @@ const usePostMessageListener = ({ resetInProgress }: Props) => {
 					const document = data.documents.byId[documentId]
 
 					if (!document) {
-						throw new Error(`Document with id ${documentId} not found`)
+						throw new Error(`Document with id '${documentId}' not found`)
 					}
 
 					const payload = {
