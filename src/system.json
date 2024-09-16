@@ -110,12 +110,28 @@
 			"notation": "1d12"
 		},
 		{
-			"label": "Feat Die",
-			"notation": "1d12"
+			"label": "Skill 1",
+			"notation": "1d12+1d6"
 		},
 		{
-			"label": "Success Die",
-			"notation": "1d6"
+			"label": "Skill 2",
+			"notation": "1d12+2d6"
+		},
+		{
+			"label": "Skill 3",
+			"notation": "1d12+3d6"
+		},
+		{
+			"label": "Skill 4",
+			"notation": "1d12+4d6"
+		},
+		{
+			"label": "Skill 5",
+			"notation": "1d12+5d6"
+		},
+		{
+			"label": "Skill 6",
+			"notation": "1d12+6d6"
 		}
 	]
 }
