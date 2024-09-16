@@ -7,9 +7,9 @@ import { TDocumentType } from '../../interfaces/document'
 import { TValues } from '../../interfaces/interfaces'
 import TypeSwitcher from '../TypeSwitcher'
 import context from './context'
+import useFocusHandler from './hooks/useFocusHandler'
 import useMessageToApp from './hooks/UseMessageToApp'
 import usePostMessageListener from './hooks/usePostMessageListener'
-import useFocusHandler from './useFocusHandler'
 
 export default function Container() {
 	const { state, dispatch } = useContext(context)

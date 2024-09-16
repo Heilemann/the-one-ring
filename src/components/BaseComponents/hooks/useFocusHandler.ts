@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import useMessageToApp from './hooks/UseMessageToApp'
+import useMessageToApp from './UseMessageToApp'
 
 const useFocusHandler = () => {
 	const messageToApp = useMessageToApp()
