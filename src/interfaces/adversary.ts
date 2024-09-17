@@ -1,4 +1,4 @@
-export interface Adversary {
+export interface IAdversary {
 	name: string
 	description: string
 	attributeLevel: number
@@ -14,7 +14,7 @@ export interface Adversary {
 		primary: CombatProficiency
 		secondary: CombatProficiency
 	}
-	specialDamageOptions: SpecialDamageOption[]
+	specialDamageOptions: string[] // Adjusted to a string array
 	fellAbilities: FellAbility[]
 }
 
@@ -26,7 +26,6 @@ interface CombatProficiency {
 	specialDamage: SpecialDamageOption[]
 }
 
-// Export the SpecialDamageOption type
 export type SpecialDamageOption =
 	| 'Heavy Blow'
 	| 'Break Shield'
@@ -36,7 +35,7 @@ export type SpecialDamageOption =
 interface FellAbility {
 	name: string
 	description: string
-	cost: number // Hate or Resolve points required
+	cost: number
 }
 
 // Example usage:

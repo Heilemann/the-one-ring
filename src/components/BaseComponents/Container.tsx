@@ -26,6 +26,7 @@ export default function Container() {
 		setType(state.document?.type || null)
 
 		const subscription = watch(values => {
+			console.log('values', values)
 			if (!values || !state.document) return
 			if (resetInProgress.current) {
 				resetInProgress.current = false
@@ -39,7 +40,7 @@ export default function Container() {
 					...values,
 				},
 			}
-
+			console.log('payload', payload)
 			dispatch({
 				type: 'UPDATE_DOCUMENT_VALUES',
 				payload: {

@@ -1,4 +1,4 @@
-import { forwardRef, useContext } from 'react'
+import React, { forwardRef, useContext } from 'react'
 import ReactTextareaAutosize from 'react-textarea-autosize'
 import { twMerge } from 'tailwind-merge'
 import context from '../context'

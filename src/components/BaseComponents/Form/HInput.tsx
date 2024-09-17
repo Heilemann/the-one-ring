@@ -1,7 +1,6 @@
 import { Input } from 'nrsystemtools'
-import { forwardRef } from 'react'
+import React, { forwardRef } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { borderStyle } from '../../styles/borderStyle'
 import Label from './Label'
 
 interface IHInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -16,9 +15,7 @@ const HInput = forwardRef<HTMLInputElement, IHInputProps>(
 		ref,
 	) => {
 		return (
-			<div
-				className={twMerge('flex space-x-4 text-xl', borderStyle, className)}
-			>
+			<div className={twMerge('flex space-x-4 text-xl', className)}>
 				<Label
 					className={twMerge('w-2/5 self-center text-gray-500', labelClassName)}
 					htmlFor={rest.name}
