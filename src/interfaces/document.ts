@@ -2,10 +2,10 @@ export type TDocumentType =
 	| 'character'
 	| 'note'
 	| 'weapon'
-	| 'item'
 	| 'handout'
 	| 'effect'
 	| 'equipment'
+	| 'adversary'
 
 export type TAccess = 'private' | 'public'
 

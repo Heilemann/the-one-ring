@@ -93,6 +93,20 @@
 			"windowSize": "small",
 			"allowCreate": "true",
 			"canAssumeAsCharacter": "false"
+		},
+		{
+			"type": "adversary",
+			"singularName": "Adversary",
+			"pluralName": "Adversaries",
+			"description": "Enemies and opponents in Middle-earth.",
+			"hasEditMode": "true",
+			"windowSize": "medium",
+			"allowCreate": "true",
+			"thumbnailField": [
+				"portrait",
+				"token"
+			],
+			"canAssumeAsCharacter": "false"
 		}
 	],
 	"chatMessageTypes": [

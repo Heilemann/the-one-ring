@@ -1,6 +1,7 @@
 // this component renders the correct component based on a given document's type.
 // This is where you add and remove your sheets.
 import { TDocumentType } from '../interfaces/document'
+import Adversary from './adversary/Adversary'
 import Character from './character/Character'
 import Effect from './effect/Effect'
 import Equipment from './equipment/Equipment'
@@ -23,6 +24,7 @@ export default function TypeSwitcher({ type }: Props) {
 			{type === 'handout' && <Handout />}
 			{type === 'effect' && <Effect />}
 			{type === 'equipment' && <Equipment />}
+			{type === 'adversary' && <Adversary />}
 		</div>
 	)
 }
