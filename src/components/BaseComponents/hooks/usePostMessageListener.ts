@@ -30,8 +30,10 @@ const usePostMessageListener = ({ resetInProgress }: Props) => {
 					const { documentId } = data
 					const document = data.documents.byId[documentId]
 
-					if (!document) {
-						throw new Error(`Document with id '${documentId}' not found`)
+					if (documentId === 'dice') break
+
+					if (documentId !== 'dice' && !document) {
+						throw new Error(`Document with id ${documentId} not found`)
 					}
 
 					const payload = {

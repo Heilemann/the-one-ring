@@ -8,6 +8,7 @@ import { twMerge } from 'tailwind-merge'
 import Button from './Form/Button'
 import context from './context'
 import useMessageToApp from './hooks/UseMessageToApp'
+import useOrigin from './hooks/useOrigin'
 
 interface AssetProps {
 	name: string
@@ -26,20 +27,11 @@ const Asset: FC<AssetProps> = props => {
 	const asset = assets.byId[assetId]
 	const { setValue } = useFormContext()
 	const messageToApp = useMessageToApp()
+	const { origin } = useOrigin()
 
 	useEffect(() => {
 		setAssetId(document?.values[name])
 	}, [document, assets, setAssetId, name])
-
-	// should move this to a context
-	let parentOrigin = ''
-	if (process.env.NODE_ENV === 'development') {
-		// const protocol = window.location.protocol;
-		// const host = window.location.hostname;
-		parentOrigin = `http://localhost:3000`
-	} else {
-		parentOrigin = 'https://newreal.ms'
-	}
 
 	const handleUpload = () => {
 		messageToApp({
@@ -83,14 +75,14 @@ const Asset: FC<AssetProps> = props => {
 				<div className='relative aspect-square object-contain'>
 					<img
 						alt='na'
-						src={parentOrigin + asset.fileurl}
+						src={origin + asset.fileurl}
 						className='relative z-10 h-full w-full rounded-lg object-contain'
 						style={mediaStyle}
 					/>
 					<div
 						className='absolute inset-0 z-0 bg-contain bg-center opacity-20 blur-xl'
 						style={{
-							backgroundImage: `url(${parentOrigin + asset.fileurl})`,
+							backgroundImage: `url(${origin + asset.fileurl})`,
 						}}
 					/>
 				</div>
@@ -101,7 +93,7 @@ const Asset: FC<AssetProps> = props => {
 					loop={true}
 					muted={true}
 					playsInline={true}
-					src={parentOrigin + asset.fileurl}
+					src={origin + asset.fileurl}
 					className='object-contain'
 					style={mediaStyle}
 				/>

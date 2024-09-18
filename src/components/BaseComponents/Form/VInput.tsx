@@ -3,7 +3,7 @@ import React, { forwardRef, useContext } from 'react'
 import { RegisterOptions, useFormContext } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import context from '../context'
-import Label from './Label'
+import StyledLabel from './StyledLabel' // Update import
 
 interface IVInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	label: string
@@ -25,6 +25,7 @@ const VInput = forwardRef<HTMLInputElement, IVInputProps>(
 			centered = false,
 			name,
 			registerOptions,
+			style,
 			...rest
 		}: IVInputProps,
 		ref,
@@ -42,33 +43,25 @@ const VInput = forwardRef<HTMLInputElement, IVInputProps>(
 					centered && 'items-center',
 					className,
 				)}
+				style={style}
 			>
-				<Label
-					className={twMerge(
-						'font-semibold uppercase text-gray-500',
-						centered && 'text-center',
-					)}
-					style={{
-						fontSize: '0.65rem',
-					}}
-					htmlFor={name}
-				>
+				<StyledLabel centered={centered} htmlFor={name}>
 					{label}
-				</Label>
-				<div
-					className={twMerge(
-						'flex items-center',
-						editMode === 'edit' ? 'bg-gray-800/50 hover:bg-gray-800' : 'px-0',
-					)}
-				>
+				</StyledLabel>
+				<div className={twMerge('flex items-center')}>
 					<Input
 						ref={ref}
 						{...register(name, registerOptions)} // Register the input
 						className={twMerge(
-							'w-full flex-1 bg-transparent transition-all duration-200 ease-in-out',
+							'w-full flex-1 transition-all duration-200 ease-in-out',
 							editMode === 'edit' ? '' : 'px-0',
 							centered && 'text-center',
 						)}
+						style={{
+							padding: '0',
+							backgroundColor: 'transparent',
+							color: 'black',
+						}}
 						placeholder='—'
 						id={name}
 						disabled={editMode === 'view'}

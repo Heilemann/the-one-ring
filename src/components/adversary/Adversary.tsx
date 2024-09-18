@@ -1,32 +1,20 @@
-import { useContext } from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
-import { IAdversary, SpecialDamageOption } from '../../interfaces/adversary'
-import context from '../BaseComponents/context'
-import Label from '../BaseComponents/Form/Label'
+import { useEffect } from 'react'
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
+import { twMerge } from 'tailwind-merge'
+import background from '../../assets/background.jpg'
+import { useEditMode } from '../../hooks/useEditMode'
+import { IAdversary } from '../../interfaces/adversary'
+import Asset from '../BaseComponents/Asset'
+import StyledLabel from '../BaseComponents/Form/StyledLabel'
 import TextArea from '../BaseComponents/Form/Textarea'
-import VInput from '../BaseComponents/Form/VInput'
-
-const specialDamageOptions: SpecialDamageOption[] = [
-	'Heavy Blow',
-	'Break Shield',
-	'Pierce',
-	'Seize',
-]
+import useMessageToApp from '../BaseComponents/hooks/UseMessageToApp'
+import DiamondInput from '../DiamondInput'
+import Input from '../Input'
 
 export default function Adversary() {
-	const { state } = useContext(context)
-	const document = state?.document
-	const values = document?.values || {}
-
-	const onSubmit = (data: IAdversary) => {
-		// Handle form submission
-		console.log('Adversary data submitted:', data)
-	}
-
-	// Access form methods using useFormContext
+	const editMode = useEditMode()
+	const messageToApp = useMessageToApp()
 	const { register, control } = useFormContext<IAdversary>()
-
-	// Set up useFieldArray for fellAbilities
 	const {
 		fields: fellAbilityFields,
 		append: appendFellAbility,
@@ -36,157 +24,291 @@ export default function Adversary() {
 		name: 'fellAbilities',
 	})
 
+	// Ensure there is at least one empty ability on mount
+	useEffect(() => {
+		if (fellAbilityFields.length === 0) {
+			appendFellAbility({ name: '', description: '', cost: '' })
+		}
+	}, [appendFellAbility, fellAbilityFields])
+
+	// Watch the fellAbilities array
+	const fellAbilities =
+		useWatch({
+			control,
+			name: 'fellAbilities',
+		}) || []
+
+	// Automatically add or remove abilities based on input
+	useEffect(() => {
+		if (editMode !== 'edit') return
+
+		const lastIndex = fellAbilities.length - 1
+		const lastAbility = fellAbilities[lastIndex]
+
+		// Check if last ability has any data
+		if (
+			lastAbility &&
+			(lastAbility.name || lastAbility.description || lastAbility.cost)
+		) {
+			// Ensure there's an empty ability at the end
+			const isLastAbilityEmpty = !fellAbilities[lastIndex + 1]
+			if (isLastAbilityEmpty) {
+				appendFellAbility({ name: '', description: '', cost: '' })
+			}
+		}
+
+		// Remove any empty abilities except the last one
+		fellAbilities.forEach((ability, index) => {
+			if (index === fellAbilities.length - 1) return // Skip last ability
+			const isAbilityEmpty =
+				!ability.name && !ability.description && ability.cost === ''
+			if (isAbilityEmpty) {
+				removeFellAbility(index)
+			}
+		})
+	}, [fellAbilities, appendFellAbility, removeFellAbility, editMode])
+
+	const description = useWatch({
+		control,
+		name: 'description',
+	})
+	const combatProficiency = useWatch({
+		control,
+		name: 'combatProficiencies.primary',
+	})
+
+	const handleAttack = () => {
+		const payload = `/roll 1d12+${combatProficiency.rating}d6`
+		console.log(payload)
+		messageToApp({
+			message: 'send message',
+			data: {
+				payload,
+			},
+		})
+	}
+
 	return (
-		<div className='p-4 space-y-4'>
-			{/* Basic Info */}
-			<div className='grid grid-cols-5 gap-2'>
-				<VInput name='name' label='Name' className='col-span-4' />
-				<VInput
-					name='attributeLevel'
-					type='number'
+		<div
+			className='p-8 space-y-8 text-black'
+			style={{
+				borderImageSource: `url(${background})`,
+				borderImageSlice: '500 fill',
+				borderImageWidth: '120px',
+			}}
+		>
+			<div className='grid grid-cols-5 gap-2 items-start'>
+				<div className='col-span-3'>
+					<Input
+						className='text-xl font-bold'
+						placeholder='Name...'
+						disabled={editMode === 'view'}
+						style={{
+							fontFamily: 'Aniron',
+						}}
+						{...register('name')}
+					/>
+
+					<Input
+						className='text-sm mt-1 pb-0 font-medium text-black'
+						placeholder='Traits...'
+						disabled={editMode === 'view'}
+						{...register('traits')}
+					/>
+
+					{editMode === 'edit' ||
+					(editMode === 'view' && description !== '') ? (
+						<TextArea
+							placeholder={editMode === 'edit' ? 'Description...' : ''}
+							spellCheck={editMode !== 'view'}
+							{...register('description')}
+						/>
+					) : null}
+				</div>
+
+				<DiamondInput
 					label='Attribute Level'
+					className='col-span-2'
+					inputClassName='h-20 w-20 text-xl'
 					centered
-				/>
-			</div>
-			<div className='space-y-2'>
-				<Label>Description</Label>
-				<TextArea
-					name='description'
-					label='Description'
-					placeholder='Description'
-					className='h-24'
+					disabled={editMode === 'view'}
+					{...register('attributeLevel')}
 				/>
 			</div>
 
 			{/* Attributes */}
-			<div className='grid grid-cols-5 gap-2'>
-				<VInput name='endurance' type='number' label='Endurance' centered />
-				<VInput name='might' type='number' label='Might' centered />
-				<VInput
-					name='hateOrResolve'
-					type='number'
+			<div className='grid grid-cols-5 gap-2 mt-6'>
+				<DiamondInput
+					label='Endurance'
+					centered
+					disabled={editMode === 'view'}
+					{...register('endurance')}
+				/>
+				<DiamondInput
+					label='Might'
+					centered
+					disabled={editMode === 'view'}
+					{...register('might')}
+				/>
+				<DiamondInput
 					label='Hate/Resolve'
 					centered
+					disabled={editMode === 'view'}
+					{...register('hateOrResolve')}
 				/>
-				<VInput name='parry' type='number' label='Parry' centered />
-				<VInput name='armour' type='number' label='Armour' centered />
+				<DiamondInput
+					label='Parry'
+					centered
+					disabled={editMode === 'view'}
+					{...register('parry')}
+				/>
+				<DiamondInput
+					label='Armour'
+					centered
+					disabled={editMode === 'view'}
+					{...register('armour')}
+				/>
 			</div>
 
 			{/* Combat Proficiencies */}
-			<div className='space-y-2'>
-				<h2 className='text-lg font-bold'>Primary Combat Proficiency</h2>
-				<div className='grid grid-cols-5 gap-2'>
-					<VInput
-						name='combatProficiencies.primary.name'
-						label='Weapon Name'
-						className='col-span-2'
+			<div className='space-y-2 mt-8'>
+				<div className='grid grid-cols-6 gap-2'>
+					<StyledLabel className='pb-0 col-span-2'>
+						Combat Proficiencies
+					</StyledLabel>
+					<StyledLabel className='pb-0 text-center'>Rating</StyledLabel>
+					<StyledLabel className='pb-0 text-center'>Damage</StyledLabel>
+					<StyledLabel className='pb-0 text-center'>Injury</StyledLabel>
+					<StyledLabel className='pb-0 text-center'>Effect</StyledLabel>
+				</div>
+				<div className='grid grid-cols-6 gap-2'>
+					<Input
+						className='col-span-2 text-black'
+						{...register('combatProficiencies.primary.name')}
 					/>
-					<VInput
-						name='combatProficiencies.primary.rating'
+					<Input
 						type='number'
-						label='Rating'
 						centered
+						className={twMerge(
+							'text-black',
+							editMode === 'view' && 'cursor-pointer',
+						)}
+						readOnly={editMode === 'view'}
+						onClick={editMode === 'view' ? handleAttack : undefined}
+						{...register('combatProficiencies.primary.rating')}
 					/>
-					<VInput
-						name='combatProficiencies.primary.damage'
+					<Input
 						type='number'
-						label='Damage'
 						centered
+						className='text-black'
+						{...register('combatProficiencies.primary.damage')}
 					/>
-					<VInput
-						name='combatProficiencies.primary.injury'
+					<Input
 						type='number'
-						label='Injury'
 						centered
+						className='text-black'
+						{...register('combatProficiencies.primary.injury')}
+					/>
+					<Input
+						centered
+						className='text-black'
+						{...register('combatProficiencies.primary.effect')}
 					/>
 				</div>
-				<div className='grid grid-cols-5 gap-2'>
-					<VInput
-						name='combatProficiencies.secondary.name'
-						label='Weapon Name'
-						className='col-span-2'
+				<div className='grid grid-cols-6 gap-2'>
+					<Input
+						className='col-span-2 text-black'
+						{...register('combatProficiencies.secondary.name')}
 					/>
-					<VInput
-						name='combatProficiencies.secondary.rating'
+					<Input
 						type='number'
-						label='Rating'
+						className='text-black'
 						centered
+						{...register('combatProficiencies.secondary.rating')}
 					/>
-					<VInput
-						name='combatProficiencies.secondary.damage'
+					<Input
 						type='number'
-						label='Damage'
+						className='text-black'
 						centered
+						{...register('combatProficiencies.secondary.damage')}
 					/>
-					<VInput
-						name='combatProficiencies.secondary.injury'
+					<Input
 						type='number'
-						label='Injury'
+						className='text-black'
 						centered
+						{...register('combatProficiencies.secondary.injury')}
+					/>
+					<Input
+						centered
+						className='text-black'
+						{...register('combatProficiencies.secondary.effect')}
 					/>
 				</div>
 			</div>
 
-			{/* Special Damage Options */}
-			<div className='space-y-1'>
-				<label className='block text-lg font-medium'>
-					Special Damage Options:
-				</label>
-				{specialDamageOptions.map(option => (
-					<label key={option} className='flex items-center space-x-1'>
-						<input
-							type='checkbox'
-							value={option}
-							{...register('combatProficiencies.primary.specialDamageOptions')}
-							className='form-checkbox'
-						/>
-						<span>{option}</span>
-					</label>
-				))}
-			</div>
-
-			{/* Fell Abilities */}
-			<div className='space-y-2'>
-				<h2 className='text-lg font-bold'>Fell Abilities</h2>
-				{fellAbilityFields.map((field, index) => (
-					<div key={field.id} className='space-y-1'>
-						<VInput name={`fellAbilities.${index}.name`} label='Ability Name' />
-						<TextArea
-							name={`fellAbilities.${index}.description`}
-							label='Description'
-							placeholder='Description'
-						/>
-						<VInput
-							name={`fellAbilities.${index}.cost`}
-							type='number'
-							label='Cost'
-						/>
-						<button
-							type='button'
-							onClick={() => removeFellAbility(index)}
-							className='text-red-500'
-						>
-							Remove Ability
-						</button>
+			{/* Conditionally render Fell Abilities section */}
+			{(editMode === 'edit' ||
+				fellAbilities.some(
+					ability => ability.name || ability.description || ability.cost !== '',
+				)) && (
+				<div className='space-y-2 mt-8'>
+					{/* Header */}
+					<div className='grid grid-cols-6 gap-2'>
+						<StyledLabel className='pb-0 col-span-2'>
+							Fell Abilities
+						</StyledLabel>
+						<StyledLabel className='pb-0 col-span-1 text-center'>
+							Cost
+						</StyledLabel>
+						<StyledLabel className='pb-0 col-span-3'>Description</StyledLabel>
 					</div>
-				))}
-				<button
-					type='button'
-					onClick={() =>
-						appendFellAbility({ name: '', description: '', cost: 0 })
-					}
-					className='text-blue-500'
-				>
-					Add Ability
-				</button>
-			</div>
 
-			<button
-				type='submit'
-				className='px-4 py-2 bg-blue-500 text-white rounded'
-			>
-				Save Adversary
-			</button>
+					{fellAbilityFields.map((field, index) => (
+						<div key={field.id} className='grid grid-cols-6 gap-2 items-start'>
+							{/* Ability Name */}
+							<Input
+								className='col-span-2 text-black'
+								placeholder='—'
+								disabled={editMode === 'view'}
+								{...register(`fellAbilities.${index}.name`)}
+							/>
+
+							{/* Cost */}
+							<Input
+								className='text-center col-span-1'
+								placeholder='—'
+								disabled={editMode === 'view'}
+								{...register(`fellAbilities.${index}.cost`)}
+							/>
+
+							{/* Description */}
+							<TextArea
+								className={twMerge('col-span-3', editMode === 'view' && 'my-0')}
+								placeholder='—'
+								disabled={editMode === 'view'}
+								{...register(`fellAbilities.${index}.description`)}
+							/>
+
+							{/* Remove Button (only in edit mode and if more than one ability) */}
+							{editMode === 'edit' && fellAbilityFields.length > 1 && (
+								<button
+									type='button'
+									onClick={() => removeFellAbility(index)}
+									className='text-red-500 col-span-6 text-right'
+								>
+									Remove Ability
+								</button>
+							)}
+						</div>
+					))}
+				</div>
+			)}
+			<Asset
+				name='token'
+				addLabel='Add Portrait'
+				removeLabel='Remove Portrait'
+				className='mx-auto'
+			/>
 		</div>
 	)
 }

@@ -3,10 +3,16 @@ body,
 #root {
 	width: 100%;
 	height: 100%;
+	color: black;
 }
 
 .w-md-editor-text-pre > code,
 .w-md-editor-text-input {
 	font-size: 40px !important;
 	line-height: 40px !important;
+}
+
+@font-face {
+	font-family: 'Aniron';
+	src: url(./assets/anicb___.ttf);
 }

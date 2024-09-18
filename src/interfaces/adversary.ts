@@ -14,8 +14,9 @@ export interface IAdversary {
 		primary: CombatProficiency
 		secondary: CombatProficiency
 	}
-	specialDamageOptions: string[] // Adjusted to a string array
+	specialDamageOptions: string[]
 	fellAbilities: FellAbility[]
+	traits: string
 }
 
 interface CombatProficiency {
@@ -24,6 +25,7 @@ interface CombatProficiency {
 	damage: number
 	injury: number
 	specialDamage: SpecialDamageOption[]
+	effect: string
 }
 
 export type SpecialDamageOption =
@@ -39,7 +41,7 @@ interface FellAbility {
 }
 
 // Example usage:
-export const exampleAdversary: Adversary = {
+export const exampleAdversary: IAdversary = {
 	name: 'Orc Warrior',
 	description: 'A fierce servant of the Dark Lord',
 	attributeLevel: 5,
@@ -58,6 +60,7 @@ export const exampleAdversary: Adversary = {
 			damage: 5,
 			injury: 12,
 			specialDamage: ['Pierce', 'Heavy Blow'],
+			effect: '',
 		},
 		secondary: {
 			name: 'Bow',
@@ -65,6 +68,7 @@ export const exampleAdversary: Adversary = {
 			damage: 4,
 			injury: 10,
 			specialDamage: ['Pierce'],
+			effect: '',
 		},
 	},
 	specialDamageOptions: ['Heavy Blow', 'Pierce'],
@@ -75,4 +79,5 @@ export const exampleAdversary: Adversary = {
 			cost: 1,
 		},
 	],
+	traits: 'Cunning',
 }
