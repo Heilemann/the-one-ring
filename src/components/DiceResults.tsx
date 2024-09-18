@@ -48,12 +48,22 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 					{die.rolls?.map((roll, i) => {
 						const dieType = `d${roll.die}` // e.g., 'd6'
 
+						// Check if the roll is a 6 on a d6
+						const isSixOnD6 = roll.die === 6 && roll.value === 6
+
+						// Check if the roll is 11 or 12 on a d12
+						const isElevenOnD12 = roll.die === 12 && roll.value === 11
+						const isTwelveOnD12 = roll.die === 12 && roll.value === 12
+
 						return (
 							<div
 								key={`${idx}-${i}`}
 								className={twMerge(
 									'flex h-8 w-8 flex-col items-center justify-center rounded-md border-2 border-white/10 p-2',
-									dieType, // Add die type as className
+									dieType, // Add die type as a className
+									isSixOnD6 && 'bg-green-500 text-white', // Highlight in green if d6 rolled a 6
+									isElevenOnD12 && 'bg-red-500 text-white', // Highlight in red if d12 rolled an 11
+									isTwelveOnD12 && 'bg-green-500 text-white', // Highlight in green if d12 rolled a 12
 								)}
 							>
 								<div>{roll.value}</div>
@@ -75,6 +85,47 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 		}
 		return null
 	}
+
+	// New code to determine success levels
+	const getSuccessLevel = () => {
+		let numberOfSixes = 0
+		let rolledD12 = false
+
+		const processDie = (die: RollResultArray | Modifier) => {
+			if (die.type === 'die') {
+				// Check if a d12 was rolled
+				if (die.die.value === 12) {
+					rolledD12 = true
+				}
+
+				die.rolls?.forEach(roll => {
+					// Count 6's on d6's
+					if (roll.die === 6 && roll.value === 6) {
+						numberOfSixes += 1
+					}
+					// Check if a d12 was rolled (in case it's in rolls)
+					if (roll.die === 12) {
+						rolledD12 = true
+					}
+				})
+			}
+		}
+
+		if (diceResult.type === 'expressionroll') {
+			diceResult.dice.forEach(processDie)
+		} else if (diceResult.type === 'die') {
+			processDie(diceResult as RollResultArray)
+		}
+
+		if (rolledD12 && numberOfSixes >= 2) {
+			return 'Extraordinary Success'
+		} else if (rolledD12 && numberOfSixes >= 1) {
+			return 'Great Success'
+		}
+		return null
+	}
+
+	const successLevel = getSuccessLevel()
 
 	return (
 		<div
@@ -99,6 +150,13 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 				>
 					{renderDice()}
 				</div>
+
+				{/* Display success level if applicable */}
+				{successLevel && (
+					<div className='text-base font-bold text-green-500'>
+						{successLevel}
+					</div>
+				)}
 			</div>
 		</div>
 	)
