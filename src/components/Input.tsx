@@ -18,8 +18,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 				ref={ref}
 				type={type}
 				className={twMerge(
-					'bg-transparent focus:outline-none placeholder:text-[#9f4c3f]/50 w-full',
-					'autofill:bg-transparent autofill:text-[#9f4c3f] autofill:shadow-[inset_0_0_0px_1000px_transparent] text-[#9f4c3f] transition-all duration-200 ease-in-out',
+					'bg-transparent focus:outline-none placeholder:text-[#ba5450]/50 w-full autofill:bg-transparent autofill:text-[#ba5450] autofill:shadow-[inset_0_0_0px_1000px_transparent] text-[#ba5450] transition-all duration-200 ease-in-out',
 					centered && 'text-center',
 					rest.readOnly && 'cursor-pointer',
 					className,

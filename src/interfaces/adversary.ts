@@ -4,10 +4,7 @@ export interface IAdversary {
 	attributeLevel: number
 	endurance: number
 	might: number
-	hateOrResolve: {
-		type: 'Hate' | 'Resolve'
-		value: number
-	}
+	hateOrResolve: number
 	parry: number
 	armour: number
 	combatProficiencies: {
@@ -47,10 +44,7 @@ export const exampleAdversary: IAdversary = {
 	attributeLevel: 5,
 	endurance: 20,
 	might: 2,
-	hateOrResolve: {
-		type: 'Hate',
-		value: 3,
-	},
+	hateOrResolve: 3,
 	parry: 3,
 	armour: 4,
 	combatProficiencies: {

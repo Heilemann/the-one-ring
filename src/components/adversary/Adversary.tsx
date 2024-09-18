@@ -29,7 +29,8 @@ export default function Adversary() {
 		if (fellAbilityFields.length === 0) {
 			appendFellAbility({ name: '', description: '', cost: '' })
 		}
-	}, [appendFellAbility, fellAbilityFields])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []) // Run only once on mount
 
 	// Watch the fellAbilities array
 	const fellAbilities =
@@ -38,35 +39,30 @@ export default function Adversary() {
 			name: 'fellAbilities',
 		}) || []
 
-	// Automatically add or remove abilities based on input
+	// Automatically add an empty ability when the last one has data
 	useEffect(() => {
 		if (editMode !== 'edit') return
 
 		const lastIndex = fellAbilities.length - 1
 		const lastAbility = fellAbilities[lastIndex]
 
-		// Check if last ability has any data
 		if (
 			lastAbility &&
 			(lastAbility.name || lastAbility.description || lastAbility.cost)
 		) {
-			// Ensure there's an empty ability at the end
-			const isLastAbilityEmpty = !fellAbilities[lastIndex + 1]
-			if (isLastAbilityEmpty) {
+			// Check if there's already an empty ability at the end
+			const isNextAbilityEmpty =
+				fellAbilities[lastIndex + 1] &&
+				!fellAbilities[lastIndex + 1].name &&
+				!fellAbilities[lastIndex + 1].description &&
+				!fellAbilities[lastIndex + 1].cost
+
+			if (!isNextAbilityEmpty) {
 				appendFellAbility({ name: '', description: '', cost: '' })
 			}
 		}
-
-		// Remove any empty abilities except the last one
-		fellAbilities.forEach((ability, index) => {
-			if (index === fellAbilities.length - 1) return // Skip last ability
-			const isAbilityEmpty =
-				!ability.name && !ability.description && ability.cost === ''
-			if (isAbilityEmpty) {
-				removeFellAbility(index)
-			}
-		})
-	}, [fellAbilities, appendFellAbility, removeFellAbility, editMode])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [editMode, fellAbilities.length]) // Depend only on the length
 
 	const description = useWatch({
 		control,
@@ -90,7 +86,7 @@ export default function Adversary() {
 
 	return (
 		<div
-			className='p-8 space-y-8 text-black'
+			className='p-8 space-y-8 text-black h-full'
 			style={{
 				borderImageSource: `url(${background})`,
 				borderImageSlice: '500 fill',
@@ -222,8 +218,13 @@ export default function Adversary() {
 					/>
 					<Input
 						type='number'
-						className='text-black'
 						centered
+						className={twMerge(
+							'text-black',
+							editMode === 'view' && 'cursor-pointer',
+						)}
+						readOnly={editMode === 'view'}
+						onClick={editMode === 'view' ? handleAttack : undefined}
 						{...register('combatProficiencies.secondary.rating')}
 					/>
 					<Input
@@ -275,6 +276,7 @@ export default function Adversary() {
 
 							{/* Cost */}
 							<Input
+								type='number'
 								className='text-center col-span-1'
 								placeholder='—'
 								disabled={editMode === 'view'}

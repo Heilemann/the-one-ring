@@ -17,7 +17,7 @@ export default function TypeSwitcher({ type }: Props) {
 	if (!type) return null
 
 	return (
-		<div className='bottom-0 box-border flex min-h-full w-full flex-col text-sm text-gray-100'>
+		<div className='bottom-0 box-border flex min-h-full w-full flex-col text-sm text-gray-100 h-full'>
 			{type === 'character' && <Character />}
 			{type === 'note' && <Note />}
 			{type === 'weapon' && <Weapon />}
