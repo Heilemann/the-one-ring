@@ -167,7 +167,7 @@ export default function Adversary() {
 						centered
 						className={twMerge(
 							'text-black',
-							editMode === 'view' && 'cursor-pointer',
+							editMode === 'view' && 'cursor-pointer underline',
 						)}
 						readOnly={editMode === 'view'}
 						onClick={editMode === 'view' ? handleAttack : undefined}
@@ -201,7 +201,7 @@ export default function Adversary() {
 						centered
 						className={twMerge(
 							'text-black',
-							editMode === 'view' && 'cursor-pointer',
+							editMode === 'view' && 'cursor-pointer underline',
 						)}
 						readOnly={editMode === 'view'}
 						onClick={editMode === 'view' ? handleAttack : undefined}

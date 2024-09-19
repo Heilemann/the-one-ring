@@ -40,7 +40,7 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 		return null
 	}
 
-	// Function to render a single die or modifier
+	// Updated typeDie function
 	const typeDie = (die: RollResultArray | Modifier, idx: number) => {
 		if (die.type === 'die') {
 			return (
@@ -48,25 +48,38 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 					{die.rolls?.map((roll, i) => {
 						const dieType = `d${roll.die}` // e.g., 'd6'
 
-						// Check if the roll is a 6 on a d6
+						// Check conditions for styling
 						const isSixOnD6 = roll.die === 6 && roll.value === 6
-
-						// Check if the roll is 11 or 12 on a d12
 						const isElevenOnD12 = roll.die === 12 && roll.value === 11
 						const isTwelveOnD12 = roll.die === 12 && roll.value === 12
+
+						// New condition for d6 rolls of 1, 2, or 3
+						const isLowOnD6 = roll.die === 6 && [1, 2, 3].includes(roll.value)
 
 						return (
 							<div
 								key={`${idx}-${i}`}
 								className={twMerge(
-									'flex h-6 w-6 text-base flex-col items-center justify-center rounded-md bg-white/10',
+									'flex h-6 w-6 text-xl flex-col items-center justify-center rounded-md bg-white/10',
 									dieType, // Add die type as a className
-									isSixOnD6 && 'bg-white text-black', // Highlight in green if d6 rolled a 6
-									isElevenOnD12 && 'bg-red-500 text-white', // Highlight in red if d12 rolled an 11
-									isTwelveOnD12 && 'bg-white text-black', // Highlight in green if d12 rolled a 12
+									isSixOnD6 && 'bg-white text-black', // Highlight if d6 rolled a 6
+									isElevenOnD12 && 'bg-red-500 text-white', // Highlight if d12 rolled an 11
+									isTwelveOnD12 && 'bg-white text-black', // Highlight if d12 rolled a 12
 								)}
 							>
-								<div className='-mt-0.5 -mr-0.5'>{roll.value}</div>
+								<div
+									className='-mt-0.5 -mr-0.5 stroke'
+									style={
+										isLowOnD6
+											? {
+													color: 'transparent',
+													WebkitTextStroke: '1px #ccc',
+												}
+											: undefined
+									}
+								>
+									{roll.value}
+								</div>
 							</div>
 						)
 					})}
