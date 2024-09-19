@@ -59,14 +59,14 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 							<div
 								key={`${idx}-${i}`}
 								className={twMerge(
-									'flex h-8 w-8 flex-col items-center justify-center rounded-md border-2 border-white/10 p-2',
+									'flex h-6 w-6 text-base flex-col items-center justify-center rounded-md bg-white/10',
 									dieType, // Add die type as a className
-									isSixOnD6 && 'bg-green-500 text-white', // Highlight in green if d6 rolled a 6
+									isSixOnD6 && 'bg-white text-black', // Highlight in green if d6 rolled a 6
 									isElevenOnD12 && 'bg-red-500 text-white', // Highlight in red if d12 rolled an 11
-									isTwelveOnD12 && 'bg-green-500 text-white', // Highlight in green if d12 rolled a 12
+									isTwelveOnD12 && 'bg-white text-black', // Highlight in green if d12 rolled a 12
 								)}
 							>
-								<div>{roll.value}</div>
+								<div className='-mt-0.5 -mr-0.5'>{roll.value}</div>
 							</div>
 						)
 					})}
@@ -77,19 +77,45 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 			return (
 				<div
 					key={idx}
-					className='flex h-8 w-8 items-center justify-center rounded-md border-2 border-white/10 p-2'
+					className='flex text-sm h-6 w-6 items-center justify-center rounded-md border-2 border-white/10 p-1'
 				>
-					{die.value}
+					<div className='-mt-0.5 -mr-0.5'>{die.value}</div>
 				</div>
 			)
 		}
 		return null
 	}
 
-	// New code to determine success levels
+	// Function to adjust the total value if d12 rolls an 11
+	const getAdjustedTotal = () => {
+		let adjustedTotal = diceResult.value
+
+		const processDie = (die: RollResultArray | Modifier) => {
+			if (die.type === 'die') {
+				die.rolls?.forEach(roll => {
+					if (roll.die === 12 && roll.value === 11) {
+						adjustedTotal -= 11 // Subtract 11 if d12 rolls an 11
+					}
+				})
+			}
+		}
+
+		if (diceResult.type === 'expressionroll') {
+			diceResult.dice.forEach(processDie)
+		} else if (diceResult.type === 'die') {
+			processDie(diceResult as RollResultArray)
+		}
+
+		return adjustedTotal
+	}
+
+	const adjustedTotal = getAdjustedTotal()
+
+	// Updated success level conditions
 	const getSuccessLevel = () => {
 		let numberOfSixes = 0
 		let rolledD12 = false
+		let rolledD12_12 = false
 
 		const processDie = (die: RollResultArray | Modifier) => {
 			if (die.type === 'die') {
@@ -103,9 +129,12 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 					if (roll.die === 6 && roll.value === 6) {
 						numberOfSixes += 1
 					}
-					// Check if a d12 was rolled (in case it's in rolls)
+					// Check if a d12 rolled a 12
 					if (roll.die === 12) {
 						rolledD12 = true
+						if (roll.value === 12) {
+							rolledD12_12 = true
+						}
 					}
 				})
 			}
@@ -117,7 +146,14 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 			processDie(diceResult as RollResultArray)
 		}
 
-		if (rolledD12 && numberOfSixes >= 2) {
+		// Updated success level conditions
+		if (rolledD12_12 && numberOfSixes >= 2) {
+			return 'Automatic Extraordinary Success'
+		} else if (rolledD12_12 && numberOfSixes >= 1) {
+			return 'Automatic Great Success'
+		} else if (rolledD12_12) {
+			return 'Automatic Success'
+		} else if (rolledD12 && numberOfSixes >= 2) {
 			return 'Extraordinary Success'
 		} else if (rolledD12 && numberOfSixes >= 1) {
 			return 'Great Success'
@@ -129,33 +165,23 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 
 	return (
 		<div
-			className='text-2xl text-white'
+			className='text-white'
 			style={{
 				fontFamily: 'Aniron',
 			}}
 		>
-			<div className='flex flex-col items-center gap-1'>
-				{/* Display total result */}
-				<div
-					className='text-4xl font-bold'
-					style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}
-				>
-					{diceResult.value}
-				</div>
+			<div className='flex flex-col items-center'>
+				{/* Display adjusted total result */}
+				<div className='text-2xl font-bold'>{adjustedTotal}</div>
 
 				{/* Display individual dice and operators */}
-				<div
-					className='mb-4 flex flex-wrap items-center gap-1'
-					style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}
-				>
+				<div className='mb-0 flex flex-wrap items-center gap-1'>
 					{renderDice()}
 				</div>
 
 				{/* Display success level if applicable */}
 				{successLevel && (
-					<div className='text-base font-bold text-green-500'>
-						{successLevel}
-					</div>
+					<div className='text-xs font-bold text-white'>{successLevel}</div>
 				)}
 			</div>
 		</div>

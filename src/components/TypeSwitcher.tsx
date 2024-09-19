@@ -1,5 +1,6 @@
 // this component renders the correct component based on a given document's type.
 // This is where you add and remove your sheets.
+import background from '../assets/background.jpg'
 import { TDocumentType } from '../interfaces/document'
 import Adversary from './adversary/Adversary'
 import Character from './character/Character'
@@ -17,7 +18,14 @@ export default function TypeSwitcher({ type }: Props) {
 	if (!type) return null
 
 	return (
-		<div className='bottom-0 box-border flex min-h-full w-full flex-col text-sm text-gray-100 h-full'>
+		<div
+			className='bottom-0 box-border flex min-h-full w-full h-full flex-col text-sm text-gray-100 p-8'
+			style={{
+				borderImageSource: `url(${background})`,
+				borderImageSlice: '500 fill',
+				borderImageWidth: '120px',
+			}}
+		>
 			{type === 'character' && <Character />}
 			{type === 'note' && <Note />}
 			{type === 'weapon' && <Weapon />}

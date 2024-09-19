@@ -1,7 +1,5 @@
-import { useEffect } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
-import background from '../../assets/background.jpg'
 import { useEditMode } from '../../hooks/useEditMode'
 import { IAdversary } from '../../interfaces/adversary'
 import Asset from '../BaseComponents/Asset'
@@ -24,46 +22,11 @@ export default function Adversary() {
 		name: 'fellAbilities',
 	})
 
-	// Ensure there is at least one empty ability on mount
-	useEffect(() => {
-		if (fellAbilityFields.length === 0) {
-			appendFellAbility({ name: '', description: '', cost: '' })
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []) // Run only once on mount
-
-	// Watch the fellAbilities array
 	const fellAbilities =
 		useWatch({
 			control,
 			name: 'fellAbilities',
 		}) || []
-
-	// Automatically add an empty ability when the last one has data
-	useEffect(() => {
-		if (editMode !== 'edit') return
-
-		const lastIndex = fellAbilities.length - 1
-		const lastAbility = fellAbilities[lastIndex]
-
-		if (
-			lastAbility &&
-			(lastAbility.name || lastAbility.description || lastAbility.cost)
-		) {
-			// Check if there's already an empty ability at the end
-			const isNextAbilityEmpty =
-				fellAbilities[lastIndex + 1] &&
-				!fellAbilities[lastIndex + 1].name &&
-				!fellAbilities[lastIndex + 1].description &&
-				!fellAbilities[lastIndex + 1].cost
-
-			if (!isNextAbilityEmpty) {
-				appendFellAbility({ name: '', description: '', cost: '' })
-			}
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [editMode, fellAbilities.length]) // Depend only on the length
-
 	const description = useWatch({
 		control,
 		name: 'description',
@@ -74,27 +37,39 @@ export default function Adversary() {
 	})
 
 	const handleAttack = () => {
-		const payload = `/roll 1d12+${combatProficiency.rating}d6`
-		console.log(payload)
 		messageToApp({
 			message: 'send message',
 			data: {
-				payload,
+				payload: `/roll 1d12+${combatProficiency.rating}d6`,
 			},
 		})
 	}
 
+	// Watch hateOrResolve as a number
+	const hateOrResolve =
+		useWatch({
+			control,
+			name: 'hateOrResolve',
+		}) || 0
+
+	const traits = useWatch({
+		control,
+		name: 'traits',
+	})
+
+	// Compute total cost of fell abilities
+	const totalFellAbilityCost = fellAbilities.reduce((total, ability) => {
+		const cost = Number(ability.cost) || 0
+		return total + cost
+	}, 0)
+
+	// Calculate remaining Hate/Resolve points
+	const remainingHateOrResolve = hateOrResolve - totalFellAbilityCost
+
 	return (
-		<div
-			className='p-8 space-y-8 text-black h-full'
-			style={{
-				borderImageSource: `url(${background})`,
-				borderImageSlice: '500 fill',
-				borderImageWidth: '120px',
-			}}
-		>
+		<div>
 			<div className='grid grid-cols-5 gap-2 items-start'>
-				<div className='col-span-3'>
+				<div className='col-span-5'>
 					<Input
 						className='text-xl font-bold'
 						placeholder='Name...'
@@ -105,15 +80,16 @@ export default function Adversary() {
 						{...register('name')}
 					/>
 
-					<Input
-						className='text-sm mt-1 pb-0 font-medium text-black'
-						placeholder='Traits...'
-						disabled={editMode === 'view'}
-						{...register('traits')}
-					/>
+					{(editMode === 'edit' || (editMode === 'view' && traits)) && (
+						<Input
+							className='text-sm mt-1 pb-0 font-medium text-black'
+							placeholder={'Traits...'}
+							disabled={editMode === 'view'}
+							{...register('traits')}
+						/>
+					)}
 
-					{editMode === 'edit' ||
-					(editMode === 'view' && description !== '') ? (
+					{editMode === 'edit' || (editMode === 'view' && description) ? (
 						<TextArea
 							placeholder={editMode === 'edit' ? 'Description...' : ''}
 							spellCheck={editMode !== 'view'}
@@ -121,19 +97,17 @@ export default function Adversary() {
 						/>
 					) : null}
 				</div>
+			</div>
 
+			{/* Attributes */}
+			<div className='grid md:grid-cols-6 gap-2 mt-6 grid-cols-3'>
 				<DiamondInput
-					label='Attribute Level'
-					className='col-span-2'
-					inputClassName='h-20 w-20 text-xl'
+					label='Attribute'
+					className='col-span-1'
 					centered
 					disabled={editMode === 'view'}
 					{...register('attributeLevel')}
 				/>
-			</div>
-
-			{/* Attributes */}
-			<div className='grid grid-cols-5 gap-2 mt-6'>
 				<DiamondInput
 					label='Endurance'
 					centered
@@ -150,6 +124,8 @@ export default function Adversary() {
 					label='Hate/Resolve'
 					centered
 					disabled={editMode === 'view'}
+					value={editMode === 'view' ? remainingHateOrResolve : hateOrResolve}
+					readOnly={editMode === 'view'}
 					{...register('hateOrResolve')}
 				/>
 				<DiamondInput
@@ -170,10 +146,14 @@ export default function Adversary() {
 			<div className='space-y-2 mt-8'>
 				<div className='grid grid-cols-6 gap-2'>
 					<StyledLabel className='pb-0 col-span-2'>
-						Combat Proficiencies
+						<span className='hidden md:block'>Combat Proficiency</span>
+						<span className='block md:hidden'>Proficiency</span>
 					</StyledLabel>
 					<StyledLabel className='pb-0 text-center'>Rating</StyledLabel>
-					<StyledLabel className='pb-0 text-center'>Damage</StyledLabel>
+					<StyledLabel className='pb-0 text-center'>
+						<span className='hidden md:block'>Damage</span>
+						<span className='block md:hidden'>Dmg</span>
+					</StyledLabel>
 					<StyledLabel className='pb-0 text-center'>Injury</StyledLabel>
 					<StyledLabel className='pb-0 text-center'>Effect</StyledLabel>
 				</div>
@@ -303,6 +283,19 @@ export default function Adversary() {
 							)}
 						</div>
 					))}
+
+					{/* Add Ability Button */}
+					{editMode === 'edit' && (
+						<button
+							type='button'
+							onClick={() =>
+								appendFellAbility({ name: '', description: '', cost: '' })
+							}
+							className='text-blue-500'
+						>
+							Add Ability
+						</button>
+					)}
 				</div>
 			)}
 			<Asset
