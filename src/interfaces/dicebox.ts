@@ -61,6 +61,7 @@ export interface ExpressionResult extends BaseObject {
 	dice: (RollResultArray | Modifier)[]
 	ops: ('+' | '-' | '*' | '/')[]
 	type: 'expressionroll'
+	label?: string
 }
 
 export type DiceResult = RollResultArray | ExpressionResult

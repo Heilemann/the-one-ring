@@ -19,11 +19,14 @@ export default function TypeSwitcher({ type }: Props) {
 
 	return (
 		<div
-			className='bottom-0 box-border flex min-h-full w-full h-full flex-col text-sm text-gray-100 p-8'
+			className='min-h-screen h-auto flex flex-col text-sm text-black p-8'
 			style={{
-				borderImageSource: `url(${background})`,
-				borderImageSlice: '500 fill',
-				borderImageWidth: '120px',
+				backgroundImage: `url(${background})`,
+				backgroundSize: 'cover',
+				backgroundPosition: 'center',
+				backgroundRepeat: 'no-repeat',
+				minHeight: '100vh',
+				height: 'auto',
 			}}
 		>
 			{type === 'character' && <Character />}

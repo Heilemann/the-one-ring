@@ -1,8 +1,11 @@
 import React, { forwardRef } from 'react'
 import { twMerge } from 'tailwind-merge'
-import diamond from '../assets/diamond.png' // Import the image
+import diamond from '../assets/diamond.png'
+import diamondWithFlourish from '../assets/diamondwithflourish.png'
 import { useEditMode } from '../hooks/useEditMode'
 import StyledLabel from './BaseComponents/Form/StyledLabel'
+import LargeHeader from './BaseComponents/LargeHeader'
+import MediumHeader from './BaseComponents/MediumHeader'
 import Input from './Input'
 
 interface IDiamondInputProps
@@ -11,6 +14,8 @@ interface IDiamondInputProps
 	labelBelow?: boolean
 	centered?: boolean
 	inputClassName?: string
+	labelSize?: 'small' | 'medium' | 'large'
+	diamondType?: 'small' | 'flourish'
 }
 
 const DiamondInput = forwardRef<HTMLInputElement, IDiamondInputProps>(
@@ -20,14 +25,34 @@ const DiamondInput = forwardRef<HTMLInputElement, IDiamondInputProps>(
 			className,
 			label,
 			labelBelow = false,
-			centered = false,
+			centered = true,
 			inputClassName,
 			style,
+			labelSize = 'small',
+			diamondType = 'small',
 			...rest
 		},
 		ref,
 	) => {
 		const editMode = useEditMode()
+
+		const LabelComponent = () => {
+			switch (labelSize) {
+				case 'medium':
+					return <MediumHeader centered={centered}>{label}</MediumHeader>
+				case 'large':
+					return <LargeHeader centered={centered}>{label}</LargeHeader>
+				default:
+					return (
+						<StyledLabel centered={centered} htmlFor={rest.name}>
+							{label}
+						</StyledLabel>
+					)
+			}
+		}
+
+		const diamondImage =
+			diamondType === 'flourish' ? diamondWithFlourish : diamond
 
 		return (
 			<div
@@ -38,29 +63,27 @@ const DiamondInput = forwardRef<HTMLInputElement, IDiamondInputProps>(
 					className,
 				)}
 			>
-				<StyledLabel centered={centered} htmlFor={rest.name}>
-					{label}
-				</StyledLabel>
+				<LabelComponent />
 				<div>
 					<Input
 						ref={ref}
 						className={twMerge(
-							'w-14 flex-1 bg-transparent transition-all duration-200 ease-in-out h-14 font-bold text-lg p-0',
-							centered && 'text-center',
+							'w-14 flex-1 bg-transparent transition-all duration-200 ease-in-out h-14 font-bold text-lg p-0 text-center',
+							diamondType === 'flourish' && 'w-40 h-40 pl-10 text-2xl',
 							inputClassName,
 						)}
 						placeholder='—'
 						disabled={editMode === 'view'}
 						style={{
 							paddingBottom: '0px',
-							backgroundImage: `url(${diamond})`,
+							backgroundImage: `url(${diamondImage})`,
 							backgroundSize: 'contain',
 							backgroundRepeat: 'no-repeat',
 							backgroundPosition: 'center',
 							backgroundColor: 'transparent',
 							color: '#ba5450',
 							...(rest.type === 'number' && {
-								appearance: 'textfield',
+								appearance: 'none',
 								MozAppearance: 'textfield',
 								WebkitAppearance: 'none',
 							}),

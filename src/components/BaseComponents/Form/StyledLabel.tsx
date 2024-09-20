@@ -16,9 +16,6 @@ export default function StyledLabel(props: IStyledLabelProps) {
 				centered && 'text-center',
 				className,
 			)}
-			// style={{
-			// 	fontSize: '0.65rem',
-			// }}
 			{...rest}
 		>
 			{children}

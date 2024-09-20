@@ -26,7 +26,7 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 			return diceResult.dice.map((die, idx) => (
 				<React.Fragment key={idx}>
 					{/* Render operator before each die except the first */}
-					{idx > 0 && (
+					{idx > 0 && diceResult.ops && diceResult.ops[idx - 1] && (
 						<div className='flex items-center justify-center text-xl font-bold p-2'>
 							{diceResult.ops[idx - 1]}
 						</div>
@@ -46,14 +46,13 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 			return (
 				<div className='flex gap-1'>
 					{die.rolls?.map((roll, i) => {
-						const dieType = `d${roll.die}` // e.g., 'd6'
+						// Ensure roll.die is valid
+						const dieType = roll.die ? `d${roll.die}` : ''
 
 						// Check conditions for styling
 						const isSixOnD6 = roll.die === 6 && roll.value === 6
 						const isElevenOnD12 = roll.die === 12 && roll.value === 11
 						const isTwelveOnD12 = roll.die === 12 && roll.value === 12
-
-						// New condition for d6 rolls of 1, 2, or 3
 						const isLowOnD6 = roll.die === 6 && [1, 2, 3].includes(roll.value)
 
 						return (
@@ -100,14 +99,15 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 	}
 
 	// Function to adjust the total value if d12 rolls an 11
-	const getAdjustedTotal = () => {
+	const adjustedTotal = useMemo(() => {
 		let adjustedTotal = diceResult.value
 
 		const processDie = (die: RollResultArray | Modifier) => {
 			if (die.type === 'die') {
 				die.rolls?.forEach(roll => {
+					// Adjust for 11 on a d12 (Eye of Sauron)
 					if (roll.die === 12 && roll.value === 11) {
-						adjustedTotal -= 11 // Subtract 11 if d12 rolls an 11
+						adjustedTotal -= 11
 					}
 				})
 			}
@@ -120,12 +120,9 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 		}
 
 		return adjustedTotal
-	}
+	}, [diceResult])
 
-	const adjustedTotal = getAdjustedTotal()
-
-	// Updated success level conditions
-	const getSuccessLevel = () => {
+	const successLevel = useMemo(() => {
 		let numberOfSixes = 0
 		let rolledD12 = false
 		let rolledD12_12 = false
@@ -171,10 +168,32 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 		} else if (rolledD12 && numberOfSixes >= 1) {
 			return 'Great Success'
 		}
+		// Add this condition to handle when only a d12 is rolled without any sixes on d6
+		else if (rolledD12) {
+			return 'Success'
+		}
 		return null
+	}, [diceResult])
+
+	// Extract label and target number if present
+	const getLabelInfo = () => {
+		if ('label' in diceResult && diceResult.label) {
+			const label = diceResult.label.trim()
+			if (label.startsWith('>')) {
+				const target = parseInt(label.slice(1).trim())
+				if (!isNaN(target)) {
+					return { target, label: null }
+				}
+			}
+			return { label, target: null }
+		}
+		return { label: null, target: null }
 	}
 
-	const successLevel = getSuccessLevel()
+	const { label, target } = getLabelInfo()
+
+	// Check if roll meets target
+	const isTargetSuccess = target !== null ? adjustedTotal >= target : null
 
 	return (
 		<div
@@ -183,19 +202,33 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 				fontFamily: 'Aniron',
 			}}
 		>
-			<div className='flex flex-col items-center'>
-				{/* Display adjusted total result */}
-				<div className='text-2xl font-bold'>{adjustedTotal}</div>
-
+			<div className='flex flex-col items-center gap-1'>
 				{/* Display individual dice and operators */}
 				<div className='mb-0 flex flex-wrap items-center gap-1'>
 					{renderDice()}
 				</div>
+				{/* Display label if present */}
+				{label && <div className='text-lg font-bold mb-2'>{label}</div>}
+
+				{/* Display adjusted total result */}
+				{/* <div className='text-2xl font-bold'>{adjustedTotal}</div> */}
+
+				{/* Display target success if applicable */}
+				{isTargetSuccess !== null && (
+					<div className='text-xl font-bold'>
+						{adjustedTotal} vs tn {target}
+					</div>
+				)}
 
 				{/* Display success level if applicable */}
-				{successLevel && (
-					<div className='text-xs font-bold text-white'>{successLevel}</div>
-				)}
+				<div
+					className={twMerge(
+						'text-base font-bold',
+						isTargetSuccess ? 'text-green-500' : 'text-red-500',
+					)}
+				>
+					{isTargetSuccess ? successLevel : 'Failure'}
+				</div>
 			</div>
 		</div>
 	)

@@ -47,7 +47,7 @@ const Asset: FC<AssetProps> = props => {
 
 	if (!asset) {
 		return (
-			<div>
+			<div className={className}>
 				<Button
 					className={twMerge(
 						'w-full',
