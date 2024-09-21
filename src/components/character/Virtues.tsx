@@ -1,8 +1,8 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
-import StyledLabel from '../BaseComponents/Form/StyledLabel'
 import TextArea from '../BaseComponents/Form/Textarea'
+import MediumHeader from '../BaseComponents/MediumHeader'
 import DiamondInput from '../DiamondInput'
 
 const Virtues: React.FC = () => {
@@ -10,7 +10,7 @@ const Virtues: React.FC = () => {
 
 	return (
 		<div className='mt-4'>
-			<StyledLabel>Virtues</StyledLabel>
+			<MediumHeader>Virtues</MediumHeader>
 			<div className='space-y-2'>
 				<TextArea
 					placeholder='List virtues...'

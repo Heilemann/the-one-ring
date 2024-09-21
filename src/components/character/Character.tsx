@@ -48,12 +48,13 @@ const Character: React.FC = () => {
 					<CurrentEndurance />
 					<CurrentHope />
 					<Conditions />
-					<TravellingGear />
 				</div>
 			</div>
-
-			<WarGear />
-			<Armour />
+			<div className='grid grid-cols-4 gap-2 mt-4'>
+				<WarGear />
+				<Armour />
+				<TravellingGear />
+			</div>
 		</div>
 	)
 }

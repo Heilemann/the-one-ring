@@ -12,7 +12,7 @@ const WarGear: React.FC = () => {
 	})
 
 	return (
-		<div className='mt-4'>
+		<div className='mt-4 col-span-2'>
 			<StyledLabel>War Gear</StyledLabel>
 			{fields.map((field, index) => (
 				<div key={field.id} className='grid grid-cols-5 gap-2 mb-2'>

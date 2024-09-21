@@ -1,58 +1,69 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
-import StyledLabel from '../BaseComponents/Form/StyledLabel'
-import Input from '../Input'
+import LabelInput from '../BaseComponents/LabelInput'
 
 const Armour: React.FC = () => {
 	const { register } = useFormContext<ICharacter>()
 
 	return (
-		<div className='mt-4'>
-			<StyledLabel>Armour</StyledLabel>
-			<div className='grid grid-cols-3 gap-4'>
-				<div>
-					<StyledLabel>Body Armour</StyledLabel>
-					<Input placeholder='Name' {...register('armour.armour.name')} />
-					<Input
-						type='number'
-						placeholder='Protection'
-						{...register('armour.armour.protection', { valueAsNumber: true })}
-					/>
-					<Input
-						type='number'
-						placeholder='Load'
-						{...register('armour.armour.load', { valueAsNumber: true })}
-					/>
-				</div>
-				<div>
-					<StyledLabel>Helm</StyledLabel>
-					<Input placeholder='Name' {...register('armour.helm.name')} />
-					<Input
-						type='number'
-						placeholder='Protection'
-						{...register('armour.helm.protection', { valueAsNumber: true })}
-					/>
-					<Input
-						type='number'
-						placeholder='Load'
-						{...register('armour.helm.load', { valueAsNumber: true })}
-					/>
-				</div>
-				<div>
-					<StyledLabel>Shield</StyledLabel>
-					<Input placeholder='Name' {...register('armour.shield.name')} />
-					<Input
-						type='number'
-						placeholder='Parry'
-						{...register('armour.shield.parry', { valueAsNumber: true })}
-					/>
-					<Input
-						type='number'
-						placeholder='Load'
-						{...register('armour.shield.load', { valueAsNumber: true })}
-					/>
-				</div>
+		<div className='flex flex-col gap-4'>
+			<div className='flex flex-row'>
+				<LabelInput
+					label='Armour'
+					placeholder='—'
+					{...register('armour.armour.name')}
+				/>
+				<LabelInput
+					label='Protection'
+					type='number'
+					placeholder='—'
+					{...register('armour.armour.protection', { valueAsNumber: true })}
+				/>
+				<LabelInput
+					label='Load'
+					type='number'
+					placeholder='—'
+					{...register('armour.armour.load', { valueAsNumber: true })}
+				/>
+			</div>
+			<div className='flex flex-row'>
+				<LabelInput
+					label='Helm'
+					placeholder='—'
+					{...register('armour.helm.name')}
+				/>
+				<LabelInput
+					label='&nbsp;'
+					type='number'
+					placeholder='—'
+					{...register('armour.helm.protection', { valueAsNumber: true })}
+				/>
+				<LabelInput
+					label='&nbsp;'
+					type='number'
+					placeholder='—'
+					{...register('armour.helm.load', { valueAsNumber: true })}
+				/>
+			</div>
+			<div className='flex flex-row'>
+				<LabelInput
+					label='Shield'
+					placeholder='—'
+					{...register('armour.shield.name')}
+				/>
+				<LabelInput
+					label='Parry'
+					type='number'
+					placeholder='—'
+					{...register('armour.shield.parry', { valueAsNumber: true })}
+				/>
+				<LabelInput
+					label='Load'
+					type='number'
+					placeholder='—'
+					{...register('armour.shield.load', { valueAsNumber: true })}
+				/>
 			</div>
 		</div>
 	)
