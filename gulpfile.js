@@ -31,6 +31,7 @@ const inlineScriptsAndCSS = () => {
 const renameAssetsPaths = () => {
 	return src('./dist/index.html')
 		.pipe(replace('static/media/', 'files/'))
+		.pipe(replace('assets/', 'files/')) // vite
 		.pipe(dest('./dist'))
 }
 
