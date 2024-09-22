@@ -1,4 +1,5 @@
 import React from 'react'
+import bottomborder from '../../assets/bottomborder.png'
 import heroborder from '../../assets/heroborder.png'
 import Armour from './Armour'
 import BasicInfo from './BasicInfo'
@@ -55,6 +56,17 @@ const Character: React.FC = () => {
 				<Armour />
 				<TravellingGear />
 			</div>
+			<div
+				className='mt-4 h-20 -mx-8'
+				style={{
+					backgroundImage: `url(${bottomborder})`,
+					backgroundSize: 'auto 55px',
+					backgroundPosition: 'top 10px center',
+					backgroundRepeat: 'no-repeat',
+					minHeight: '100vh',
+					height: 'auto',
+				}}
+			></div>
 		</div>
 	)
 }
