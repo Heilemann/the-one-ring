@@ -7,7 +7,14 @@ const useOrigin = (devPort = ':3000') => {
 	const port = process.env.NODE_ENV === 'development' ? devPort : ''
 	const origin = `${protocol}//${host}${port}`
 
-	console.log({ protocol, host, port, origin })
+	if (origin === 'about://') {
+		return {
+			protocol: '',
+			host: '',
+			port: '',
+			origin: '',
+		}
+	}
 
 	return {
 		protocol: protocol,
