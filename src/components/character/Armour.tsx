@@ -2,34 +2,35 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
 import LabelInput from '../BaseComponents/LabelInput'
-import MediumHeader from '../BaseComponents/MediumHeader'
 
 const Armour: React.FC = () => {
 	const { register } = useFormContext<ICharacter>()
 
 	return (
-		<div className='flex flex-col gap-4'>
-			<MediumHeader>Armour</MediumHeader>
-			<div className='flex flex-row'>
+		<div className='flex flex-col'>
+			<div className='flex flex-row space-x-2'>
 				<LabelInput
 					label='Armour'
+					labelClassName='mt-0'
 					placeholder='—'
 					{...register('armour.armour.name')}
 				/>
 				<LabelInput
 					label='Protection'
+					labelClassName='mt-0'
 					type='number'
 					placeholder='—'
 					{...register('armour.armour.protection', { valueAsNumber: true })}
 				/>
 				<LabelInput
 					label='Load'
+					labelClassName='mt-0'
 					type='number'
 					placeholder='—'
 					{...register('armour.armour.load', { valueAsNumber: true })}
 				/>
 			</div>
-			<div className='flex flex-row'>
+			<div className='flex flex-row space-x-2'>
 				<LabelInput
 					label='Helm'
 					placeholder='—'
@@ -48,7 +49,7 @@ const Armour: React.FC = () => {
 					{...register('armour.helm.load', { valueAsNumber: true })}
 				/>
 			</div>
-			<div className='flex flex-row'>
+			<div className='flex flex-row space-x-2'>
 				<LabelInput
 					label='Shield'
 					placeholder='—'

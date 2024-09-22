@@ -1,6 +1,7 @@
 import { forwardRef } from 'react'
 import { twMerge } from 'tailwind-merge'
 import Input from '../Input'
+import StyledLabel from './Form/StyledLabel'
 
 interface LabelInputProps {
 	label: string
@@ -8,24 +9,37 @@ interface LabelInputProps {
 	centered?: boolean
 	className?: string
 	inputClassName?: string
+	labelClassName?: string
 	[rest: string]: any
 }
 
 const LabelInput = forwardRef<HTMLInputElement, LabelInputProps>(
 	(
-		{ label, placeholder, centered, className, inputClassName, ...rest },
+		{
+			label,
+			placeholder,
+			centered,
+			className,
+			inputClassName,
+			labelClassName,
+			...rest
+		},
 		ref,
 	) => {
 		const inputId = `input-${label.replace(/\s+/g, '-').toLowerCase()}`
 
 		return (
 			<div className={twMerge('flex flex-col', className)}>
-				<label
+				<StyledLabel
 					htmlFor={inputId}
-					className='block text-xs mt-1 -mb-1 text-[#ba5450]'
+					className={twMerge(
+						'block text-xs mt-2 -mb-1.5 text-[#ba5450]',
+						centered && 'text-center',
+						labelClassName,
+					)}
 				>
 					{label}
-				</label>
+				</StyledLabel>
 				<Input
 					ref={ref}
 					id={inputId}

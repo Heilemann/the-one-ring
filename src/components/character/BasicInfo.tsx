@@ -29,11 +29,13 @@ const BasicInfo: React.FC = () => {
 				/>
 				<LabelInput
 					label='Age'
+					centered
 					{...register('basicInfo.age')}
 					className='col-span-1'
 				/>
 				<LabelInput
 					label='Treasure'
+					centered
 					{...register('basicInfo.treasure')}
 					className='col-span-1'
 				/>

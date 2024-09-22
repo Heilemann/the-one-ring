@@ -1,8 +1,8 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
+import LabelInput from '../BaseComponents/LabelInput'
 import MediumHeader from '../BaseComponents/MediumHeader'
-import Input from '../Input'
 
 const Conditions: React.FC = () => {
 	const { register } = useFormContext<ICharacter>()
@@ -38,16 +38,12 @@ const Conditions: React.FC = () => {
 					/>
 					<label htmlFor='wounded'>Wounded</label>
 				</div>
-				<div>
-					<label htmlFor='injury' className='block mb-1'>
-						Injury
-					</label>
-					<Input
-						id='injury'
-						placeholder='Describe injury...'
-						{...register('conditions.injury')}
-					/>
-				</div>
+				<LabelInput
+					label='Injury'
+					placeholder='Describe injury...'
+					{...register('conditions.injury')}
+					className='block mb-1'
+				/>
 			</div>
 		</div>
 	)

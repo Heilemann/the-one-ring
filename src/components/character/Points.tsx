@@ -11,26 +11,29 @@ const Points: React.FC = () => {
 			<div className='m-auto w-36'>
 				<div className='relative inline-block left-1/2 -translate-x-1/2'>
 					<DiamondInput
-						label='Adventure'
+						label='Adventure Points'
 						placeholder='0'
 						type='number'
 						className='mt-6'
+						inputClassName='w-16 h-16'
 						{...register('adventurePoints', { valueAsNumber: true })}
 					/>
 					<DiamondInput
-						label='Skill'
+						label='Skill Points'
 						labelBelow
 						placeholder='0'
 						type='number'
-						className='absolute -bottom-8 -left-8'
+						className='absolute -bottom-9 -left-9'
+						inputClassName='w-16 h-16'
 						{...register('skillPoints', { valueAsNumber: true })}
 					/>
 					<DiamondInput
+						label='Fellowship Score'
 						labelBelow
-						label='Fellowship'
 						placeholder='0'
 						type='number'
-						className='absolute -bottom-8 -right-8'
+						className='absolute -bottom-9 -right-9'
+						inputClassName='w-16 h-16'
 						{...register('fellowshipScore', { valueAsNumber: true })}
 					/>
 				</div>

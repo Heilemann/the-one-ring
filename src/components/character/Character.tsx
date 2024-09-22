@@ -81,11 +81,12 @@ const Character: React.FC = () => {
 
 			<HorizontalStripes />
 
-			<div className='grid grid-cols-4 gap-8'>
+			<div className='grid grid-cols-3 gap-8'>
 				<WarGear />
 				<Armour />
 				<TravellingGear />
 			</div>
+
 			<div
 				className='mt-4 h-20 -mx-8'
 				style={{
