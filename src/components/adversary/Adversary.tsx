@@ -228,9 +228,10 @@ export default function Adversary() {
 			</div>
 
 			{/* Conditionally render Fell Abilities section */}
-			{(editMode === 'edit' ||
+			{/* {(editMode === 'edit' || */}
+			{(true ||
 				fellAbilities.some(
-					ability => ability.name || ability.description || ability.cost !== '',
+					ability => ability.name || ability.description || ability.cost !== 0,
 				)) && (
 				<div className='space-y-2 mt-8'>
 					{/* Header */}
