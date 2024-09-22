@@ -14,7 +14,7 @@ const CurrentHope: React.FC = () => {
 					<DiamondInput
 						labelBelow={true}
 						centered={true}
-						label='Hope'
+						label='Current'
 						placeholder='—'
 						type='number'
 						diamondType='flourish'

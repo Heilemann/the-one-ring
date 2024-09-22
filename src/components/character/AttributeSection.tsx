@@ -47,7 +47,7 @@ const AttributeSection: React.FC<AttributeSectionProps> = ({
 						label='Rating'
 						placeholder='—'
 						type='number'
-						className='absolute top-4 -right-10'
+						className='absolute top-3 -right-9'
 						{...register(`${lowerCaseTitle}.rating` as Path<ICharacter>, {
 							valueAsNumber: true,
 						})}
@@ -58,7 +58,7 @@ const AttributeSection: React.FC<AttributeSectionProps> = ({
 						label={thirdInputLabel}
 						placeholder='—'
 						type='number'
-						className='absolute bottom-3 -right-10'
+						className='absolute bottom-3 -right-9'
 						{...register(
 							`${lowerCaseTitle}.${thirdInputLabel.toLowerCase()}` as Path<ICharacter>,
 							{

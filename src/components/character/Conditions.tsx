@@ -1,16 +1,16 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
-import StyledLabel from '../BaseComponents/Form/StyledLabel'
+import LargeHeader from '../BaseComponents/LargeHeader'
 import Input from '../Input'
 
 const Conditions: React.FC = () => {
 	const { register } = useFormContext<ICharacter>()
 
 	return (
-		<div className='mt-4'>
-			<StyledLabel>Conditions</StyledLabel>
-			<div className='space-y-2'>
+		<div>
+			<LargeHeader centered>Conditions</LargeHeader>
+			<div className='mt-4 space-y-2'>
 				<div className='flex items-center'>
 					<input
 						type='checkbox'

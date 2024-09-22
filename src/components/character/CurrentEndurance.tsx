@@ -14,7 +14,7 @@ const CurrentEndurance: React.FC = () => {
 					<DiamondInput
 						labelBelow={true}
 						centered={true}
-						label='Endurance'
+						label='Current'
 						placeholder='—'
 						type='number'
 						diamondType='flourish'

@@ -36,13 +36,13 @@ const DiamondInput = forwardRef<HTMLInputElement, IDiamondInputProps>(
 		ref,
 	) => {
 		const editMode = useEditMode()
-		const diamondImage =
-			diamondType === 'flourish' ? diamondWithFlourish : diamond
+		const hasFlourish = diamondType === 'flourish'
+		const diamondImage = hasFlourish ? diamondWithFlourish : diamond
 
 		const labelClass = twMerge(
-			'absolute -translate-x-1/2 left-1/2 -translate-y-1/2 p-0',
-			labelBelow ? '-bottom-7' : '-top-3',
-			labelBelow && diamondType === 'flourish' && '-bottom-3',
+			'absolute -translate-x-1/2 left-1/2 -translate-y-full p-0',
+			labelBelow ? 'bottom-0 translate-y-full' : 'top-0',
+			labelBelow && hasFlourish && 'bottom-4',
 		)
 
 		const LabelComponent = () => {
