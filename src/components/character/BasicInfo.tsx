@@ -7,34 +7,39 @@ import Input from '../Input'
 
 const BasicInfo: React.FC = () => {
 	const { register } = useFormContext<ICharacter>()
+
 	return (
 		<div>
 			<Input
 				placeholder='Name'
 				centered
-				{...register('name')}
 				className='w-80 absolute left-1/2 top-14 transform -translate-x-1/2 text-xl font-bold'
 				style={{
 					fontFamily: 'Aniron',
 					backgroundImage: 'none',
 				}}
+				{...register('name')}
 			/>
 
 			<div className='grid grid-cols-8 gap-x-2 gap-y-0'>
 				<LabelInput
 					label='Heroic Culture'
-					{...register('heroicCulture')}
+					{...register('basicInfo.heroicCulture')}
 					className='col-span-2'
 				/>
-				<LabelInput label='Age' {...register('age')} className='col-span-1' />
+				<LabelInput
+					label='Age'
+					{...register('basicInfo.age')}
+					className='col-span-1'
+				/>
 				<LabelInput
 					label='Treasure'
-					{...register('treasure')}
+					{...register('basicInfo.treasure')}
 					className='col-span-1'
 				/>
 				<LabelInput
 					label='Standard of Living'
-					{...register('standardOfLiving')}
+					{...register('basicInfo.standardOfLiving')}
 					className='col-span-2'
 				/>
 				<Asset
@@ -46,33 +51,33 @@ const BasicInfo: React.FC = () => {
 
 				<LabelInput
 					label='Distinctive Features'
-					{...register('distinctiveFeatures')}
+					{...register('basicInfo.distinctiveFeatures')}
 					className='col-span-2'
 				/>
 				<LabelInput
 					label='Cultural Blessing'
-					{...register('culturalBlessing')}
+					{...register('basicInfo.culturalBlessing')}
 					className='col-span-2'
 				/>
 				<LabelInput
 					label='Patron'
-					{...register('patron')}
+					{...register('basicInfo.patron')}
 					className='col-span-2'
 				/>
 
 				<LabelInput
 					label='Calling'
-					{...register('calling')}
+					{...register('basicInfo.calling')}
 					className='col-span-2'
 				/>
 				<LabelInput
 					label='Shadow Path'
-					{...register('shadowPath')}
+					{...register('basicInfo.shadowPath')}
 					className='col-span-2'
 				/>
 				<LabelInput
 					label='Flaws'
-					{...register('flaws')}
+					{...register('basicInfo.flaws')}
 					className='col-span-2'
 				/>
 			</div>

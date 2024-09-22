@@ -17,9 +17,7 @@ function App() {
 	const [state, dispatch] = useReducer(Reducer, {} as TState)
 	// const isDevelopment = process.env.NODE_ENV === 'development'
 	const isDevelopment = false
-	const form = useForm<TValues>({
-		shouldUnregister: true,
-	})
+	const form = useForm<TValues>()
 	const { id, dice } = useDocumentParams()
 
 	return (

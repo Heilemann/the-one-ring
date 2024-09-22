@@ -1,15 +1,17 @@
 export interface ICharacter {
-	name: string
-	heroicCulture: string
-	age: string
-	standardOfLiving: string
-	distinctiveFeatures: string
-	culturalBlessing: string
-	patron: string
-	calling: string
-	shadowPath: string
-	flaws: string
-	treasure: number // Added this line
+	name: string // Moved back to root level
+	basicInfo: {
+		heroicCulture: string
+		age: string
+		standardOfLiving: string
+		distinctiveFeatures: string
+		culturalBlessing: string
+		patron: string
+		calling: string
+		shadowPath: string
+		flaws: string
+		treasure: string
+	}
 	adventurePoints: number
 	skillPoints: number
 	fellowshipScore: number

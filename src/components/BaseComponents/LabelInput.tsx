@@ -19,10 +19,15 @@ const LabelInput: React.FC<LabelInputProps> = ({
 	inputClassName,
 	...rest
 }) => {
+	const inputId = `input-${label.replace(/\s+/g, '-').toLowerCase()}`
+
 	return (
 		<div className={twMerge('flex flex-col', className)}>
-			<label className='block text-xs font-bold mb-1'>{label}</label>
+			<label htmlFor={inputId} className='block text-xs font-bold mb-1'>
+				{label}
+			</label>
 			<Input
+				id={inputId}
 				placeholder={placeholder}
 				centered={centered}
 				className={inputClassName}
