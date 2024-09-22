@@ -14,14 +14,13 @@ import { TableCellNode, TableNode, TableRowNode } from '@lexical/table'
 import React, { useContext } from 'react'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
-import inputStyle from '../../../styles/inputStyle'
 import context from '../../context'
+import AutoLinkPlugin from './AutoLinkPlugin'
 import EditorContentLoader from './EditorContentLoader'
 import EditorMode from './EditorMode'
 import ChangePlugin from './OnChangePlugin'
-import ToolbarPlugin from './ToolbarPlugin'
-import AutoLinkPlugin from './AutoLinkPlugin'
 import './styles.css'
+import ToolbarPlugin from './ToolbarPlugin'
 
 const theme = {
 	ltr: 'ltr',
@@ -87,7 +86,7 @@ const RichTextEditor: React.FC<Props> = ({ name, defaultValue, className }) => {
 				<LexicalComposer initialConfig={initialConfig}>
 					<div
 						className={twMerge(
-							editMode === 'edit' && inputStyle,
+							editMode === 'edit' && 'border-2 border-gray-500',
 							'editor-container relative p-0',
 							className,
 						)}

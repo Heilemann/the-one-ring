@@ -33,7 +33,6 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { twMerge } from 'tailwind-merge'
-import inputStyle from '../../../styles/inputStyle'
 import BlockOptionsDropdownList from './BlockOptionsDropdownList'
 import Divider from './Divider'
 import FloatingLinkEditor from './FloatingLinkEditor'
@@ -194,7 +193,7 @@ export default function ToolbarPlugin() {
 	return (
 		<div
 			className={twMerge(
-				inputStyle,
+				'',
 				'sticky top-0 flex space-x-0.5 border-b border-gray-900 bg-gray-800 py-1',
 			)}
 			ref={toolbarRef}

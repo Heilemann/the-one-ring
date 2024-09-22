@@ -32,7 +32,7 @@ const SkillItem: React.FC<SkillItemProps> = ({
 		messageToApp({
 			message: 'send message',
 			data: {
-				payload: `/roll ${diceExpression} > ${attributeTargetNumber} Rolling ${name}`,
+				payload: `/roll ${diceExpression} > ${attributeTargetNumber} ${name}`,
 			},
 		})
 	}

@@ -1,6 +1,5 @@
 import { forwardRef } from 'react'
 import { twMerge } from 'tailwind-merge'
-import inputStyle from '../../styles/inputStyle'
 
 export interface IDropdownProps
 	extends React.SelectHTMLAttributes<HTMLSelectElement> {
@@ -14,7 +13,7 @@ const Dropdown = forwardRef<HTMLSelectElement, IDropdownProps>(
 		return (
 			<select
 				ref={ref}
-				className={twMerge(inputStyle, 'cursor-pointer text-xl', className)}
+				className={twMerge('', 'cursor-pointer text-xl', className)}
 				{...rest}
 			>
 				{children}

@@ -197,24 +197,24 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 	const isTargetSuccess = target !== null ? adjustedTotal >= target : null
 
 	return (
-		<div
-			className='text-white'
-			style={{
-				fontFamily: 'Aniron',
-			}}
-		>
+		<div className='text-white'>
 			<div className='flex flex-col items-center gap-1'>
 				{/* Display individual dice and operators */}
-				<div className='mb-0 flex flex-wrap items-center gap-1'>
+				<div
+					className='mb-0 flex flex-wrap items-center gap-1'
+					style={{
+						fontFamily: 'Aniron',
+					}}
+				>
 					{renderDice()}
 				</div>
 
 				{/* Display label if present */}
-				{label && <div className='text-lg font-bold'>{label}</div>}
+				{label && <div className='text-sm font-bold'>{label}</div>}
 
 				{/* Display adjusted total result */}
-				<div className='text-lg font-bold'>
-					{adjustedTotal} {target !== null && `vs tn ${target}`}
+				<div className='text-sm opacity-70'>
+					{adjustedTotal} {target !== null && `vs TN ${target}`}
 				</div>
 
 				{/* Display success level if applicable */}
@@ -225,6 +225,9 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 							? 'text-green-600'
 							: 'text-red-500',
 					)}
+					style={{
+						fontFamily: 'Aniron',
+					}}
 				>
 					{target === null && successLevel}
 					{target !== null && isTargetSuccess && successLevel}

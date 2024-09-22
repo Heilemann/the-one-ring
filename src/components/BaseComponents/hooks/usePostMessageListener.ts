@@ -23,7 +23,9 @@ const usePostMessageListener = ({ resetInProgress }: Props) => {
 
 			if (wrongSource) return
 
-			console.log('System received message:', message, data)
+			if (process.env.NODE_ENV === 'development') {
+				console.log('System received message:', message, data)
+			}
 
 			switch (message) {
 				case 'load':
