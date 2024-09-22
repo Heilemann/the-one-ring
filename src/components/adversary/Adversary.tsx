@@ -289,8 +289,6 @@ export default function Adversary() {
 					backgroundSize: 'auto 55px',
 					backgroundPosition: 'top 10px center',
 					backgroundRepeat: 'no-repeat',
-					minHeight: '100vh',
-					height: 'auto',
 				}}
 			></div>
 		</div>
