@@ -16,7 +16,7 @@ const SkillItem: React.FC<SkillItemProps> = ({
 	path,
 	attributeTargetNumber,
 }) => {
-	const { register, control } = useFormContext<ICharacter>()
+	const { register, control, setValue } = useFormContext<ICharacter>()
 	const messageToApp = useMessageToApp()
 
 	const rating = useWatch({
@@ -72,10 +72,7 @@ const SkillItem: React.FC<SkillItemProps> = ({
 			<CheckboxRating
 				value={Number(rating)}
 				onChange={newValue => {
-					// Update the form value
-					register(`${path}.rating` as Path<ICharacter>, {
-						value: newValue,
-					})
+					setValue(`${path}.rating` as Path<ICharacter>, newValue)
 				}}
 			/>
 		</div>

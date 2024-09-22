@@ -27,7 +27,7 @@ const CheckboxRating: React.FC<CheckboxRatingProps> = ({
 				<input
 					key={index}
 					type='checkbox'
-					className='form-checkbox h-5 w-5 text-blue-600 cursor-pointer'
+					className='text-red-600 cursor-pointer'
 					checked={value > index}
 					onChange={() => handleClick(index + 1)}
 				/>
