@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { twMerge } from 'tailwind-merge'
 import eye from '../assets/eye.png'
 import gandalf from '../assets/gandalf.png'
+import tengwar from '../assets/tengwar.png'
 import { DiceResult, Modifier, RollResultArray } from '../interfaces/dicebox'
 
 interface DiceResultsProps {
@@ -77,26 +78,33 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 		const isSixOnD6 = roll.die === 6 && roll.value === 6
 		const isElevenOnD12 = roll.die === 12 && roll.value === 11
 		const isTwelveOnD12 = roll.die === 12 && roll.value === 12
-		const isLowOnD6 = roll.die === 6 && [1, 2, 3].includes(roll.value)
+
+		// Determine if the roll is low on d6 and should be colored red when weary
+		const isLowOnD6Weary =
+			isWeary && roll.die === 6 && [1, 2, 3].includes(roll.value)
+
+		// Build class names for the die
+		const dieClass = twMerge(
+			'flex text-xl flex-col items-center justify-center bg-white/10',
+			dieType === 'd6' ? 'rounded-md h-6 w-6' : 'rounded-full h-7 w-7',
+			isSixOnD6 && 'bg-white text-black', // Highlight if d6 rolled a 6
+			isLowOnD6Weary && 'text-red-500', // Color the die red if weary and value is 1-3
+		)
 
 		return (
-			<div
-				key={`${idx}-${i}`}
-				className={twMerge(
-					'flex text-xl flex-col items-center justify-center bg-white/10',
-					dieType === 'd6' ? 'rounded-md h-6 w-6' : 'rounded-full h-7 w-7',
-					isSixOnD6 && 'bg-white text-black', // Highlight if d6 rolled a 6
-				)}
-			>
+			<div key={`${idx}-${i}`} className={dieClass}>
 				{isElevenOnD12 ? (
 					<img src={eye} alt='Eye' className='w-6 object-contain' />
 				) : isTwelveOnD12 ? (
 					<img src={gandalf} alt='Gandalf' className='h-4 w-4 object-contain' />
+				) : isSixOnD6 ? (
+					// Display tengwar symbol when a d6 rolls a 6
+					<img src={tengwar} alt='Tengwar' className='w-4 h-4 object-contain' />
 				) : (
 					<div
-						className='-mt-0.5 -mr-0.5 stroke'
+						className='-mt-0.5 -mr-0.5'
 						style={
-							isLowOnD6
+							isLowOnD6Weary
 								? {
 										color: 'transparent',
 										WebkitTextStroke: '1px #ccc',
@@ -111,44 +119,101 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 		)
 	}
 
-	// Function to adjust the total value if d12 rolls an 11
-	const adjustedTotal = useMemo(() => {
-		let total = diceResult.value
+	// Extract label, target number, and conditions if present
+	const getLabelInfo = () => {
+		if ('label' in diceResult && diceResult.label) {
+			let label = diceResult.label.trim()
+			let target: number | null = null
+			let isWeary = false
+			let isMiserable = false
 
-		const adjustForEyeOfSauron = (item: RollResultArray | Modifier) => {
+			// Extract target number if present
+			if (label.startsWith('>')) {
+				const [_, targetString, ...rest] = label.split(' ')
+				target = parseInt(targetString)
+				label = rest.join(' ').trim()
+			}
+
+			// Check for condition markers
+			const conditionMarkers = label.match(/--\w+/g) || []
+			conditionMarkers.forEach(marker => {
+				if (marker === '--weary') isWeary = true
+				if (marker === '--miserable') isMiserable = true
+			})
+			// Remove condition markers from label
+			label = label.replace(/--\w+/g, '').trim()
+
+			return { target, label, isWeary, isMiserable }
+		}
+		return { label: null, target: null, isWeary: false, isMiserable: false }
+	}
+
+	const { label, target, isWeary, isMiserable } = getLabelInfo()
+
+	// Adjust the total value considering the weary condition
+	const adjustedTotal = useMemo(() => {
+		let total = 0
+
+		const adjustRolls = (item: RollResultArray | Modifier) => {
 			if (item.type === 'die') {
 				item.rolls?.forEach(roll => {
-					if (roll.die === 12 && roll.value === 11) {
-						total -= 11
+					let value = roll.value
+
+					// If weary and die is d6 with value 1-3, set value to 0
+					if (isWeary && roll.die === 6 && [1, 2, 3].includes(roll.value)) {
+						value = 0
 					}
+
+					// Subtract 11 if Eye of Sauron (11 on d12)
+					if (roll.die === 12 && roll.value === 11) {
+						value -= 11
+					}
+
+					total += value
 				})
+			} else if (item.type === 'number') {
+				total += item.value
 			}
 		}
 
 		if (diceResult.type === 'expressionroll') {
-			diceResult.dice.forEach(adjustForEyeOfSauron)
+			diceResult.dice.forEach(adjustRolls)
 		} else {
-			adjustForEyeOfSauron(diceResult as RollResultArray)
+			adjustRolls(diceResult as RollResultArray)
 		}
 
 		return total
-	}, [diceResult])
+	}, [diceResult, isWeary])
 
-	const successLevel = useMemo(() => {
+	// Check if roll meets target
+	const isTargetSuccess = target !== null ? adjustedTotal >= target : null
+
+	// Determine success level and result message considering conditions
+	const { successLevel, resultMessage } = useMemo(() => {
 		let numberOfSixes = 0
 		let rolledD12 = false
 		let rolledD12_12 = false
+		let rolledD12_11 = false // Rolled Eye of Sauron
 
 		const processRolls = (item: RollResultArray | Modifier) => {
 			if (item.type === 'die') {
 				item.rolls?.forEach(roll => {
+					// Adjust roll value for weary condition
+					let value = roll.value
+					if (isWeary && roll.die === 6 && [1, 2, 3].includes(roll.value)) {
+						value = 0
+					}
+
 					if (roll.die === 12) {
 						rolledD12 = true
 						if (roll.value === 12) {
 							rolledD12_12 = true
 						}
+						if (roll.value === 11) {
+							rolledD12_11 = true
+						}
 					}
-					if (roll.die === 6 && roll.value === 6) {
+					if (roll.die === 6 && value === 6) {
 						numberOfSixes += 1
 					}
 				})
@@ -161,40 +226,40 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 			processRolls(diceResult as RollResultArray)
 		}
 
-		if (rolledD12_12) {
-			if (numberOfSixes >= 2) return 'Automatic Extraordinary Success'
-			if (numberOfSixes >= 1) return 'Automatic Great Success'
-			return 'Automatic Success'
-		}
-		if (rolledD12) {
-			if (numberOfSixes >= 2) return 'Extraordinary Success'
-			if (numberOfSixes >= 1) return 'Great Success'
-			return 'Success'
-		}
-		return null
-	}, [diceResult])
+		let successLevel = ''
+		let resultMessage = ''
 
-	// Extract label and target number if present
-	const getLabelInfo = () => {
-		if ('label' in diceResult && diceResult.label) {
-			const label = diceResult.label.trim()
-			if (label.startsWith('>')) {
-				const [targetString, ...labelParts] = label.slice(1).trim().split(' ')
-				const target = parseInt(targetString)
-				if (!isNaN(target)) {
-					const labelText = labelParts.join(' ').trim()
-					return { target, label: labelText || null }
-				}
+		// **Check for automatic failure due to misery and Eye of Sauron**
+		if (isMiserable && rolledD12_11) {
+			successLevel = ''
+			resultMessage = 'Automatic Failure'
+		} else {
+			if (rolledD12_12) {
+				if (numberOfSixes >= 2) successLevel = 'Automatic Extraordinary Success'
+				else if (numberOfSixes >= 1) successLevel = 'Automatic Great Success'
+				else successLevel = 'Automatic Success'
+			} else if (rolledD12) {
+				if (numberOfSixes >= 2) successLevel = 'Extraordinary Success'
+				else if (numberOfSixes >= 1) successLevel = 'Great Success'
+				else successLevel = 'Success'
+			} else {
+				successLevel = ''
 			}
-			return { label, target: null }
+
+			// Determine result message
+			if (target !== null) {
+				if (isTargetSuccess) {
+					resultMessage = successLevel || 'Success'
+				} else {
+					resultMessage = 'Failure'
+				}
+			} else {
+				resultMessage = successLevel
+			}
 		}
-		return { label: null, target: null }
-	}
 
-	const { label, target } = getLabelInfo()
-
-	// Check if roll meets target
-	const isTargetSuccess = target !== null ? adjustedTotal >= target : null
+		return { successLevel, resultMessage }
+	}, [diceResult, adjustedTotal, isTargetSuccess, target, isWeary, isMiserable])
 
 	return (
 		<div className='text-white'>
@@ -209,28 +274,41 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 					{renderDice()}
 				</div>
 
-				{/* Display label if present */}
-				{label && <div className='text-sm font-bold'>{label}</div>}
+				{/* Display label, appending conditions */}
+				{label && (
+					<div className='text-sm font-bold'>
+						{label}
+						{isWeary && <span> (Weary)</span>}
+						{isMiserable && <span> (Miserable)</span>}
+					</div>
+				)}
 
 				{/* Display adjusted total result */}
 				<div className='text-sm opacity-70'>
 					{adjustedTotal} {target !== null && `vs TN ${target}`}
 				</div>
 
-				{/* Display success level if applicable */}
+				{/* Display result message */}
 				<div
 					className={twMerge(
 						'text-lg font-bold text-center',
-						target !== null && isTargetSuccess
+						resultMessage === 'Success' ||
+							resultMessage === 'Great Success' ||
+							resultMessage === 'Extraordinary Success' ||
+							resultMessage === 'Automatic Success' ||
+							resultMessage === 'Automatic Great Success' ||
+							resultMessage === 'Automatic Extraordinary Success'
 							? 'text-green-600'
-							: 'text-red-500',
+							: resultMessage === 'Automatic Failure' ||
+								  resultMessage === 'Failure'
+								? 'text-red-500'
+								: '',
 					)}
 					style={{
 						fontFamily: 'Aniron',
 					}}
 				>
-					{target === null && successLevel}
-					{target !== null && isTargetSuccess && successLevel}
+					{resultMessage}
 				</div>
 			</div>
 		</div>

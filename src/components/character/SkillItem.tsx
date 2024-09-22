@@ -25,14 +25,34 @@ const SkillItem: React.FC<SkillItemProps> = ({
 		defaultValue: 0,
 	})
 
+	// Retrieve the weary condition
+	const isWeary = useWatch({
+		control,
+		name: 'conditions.weary',
+		defaultValue: false,
+	})
+
+	// **Retrieve the miserable condition**
+	const isMiserable = useWatch({
+		control,
+		name: 'conditions.miserable',
+		defaultValue: false,
+	})
+
 	const handleRoll = (e: React.MouseEvent<HTMLLabelElement>) => {
 		e.preventDefault()
-		const ratingNumber = typeof rating === 'number' ? rating : 0
+		const ratingNumber = rating ? Number(rating) : 0
 		const diceExpression = ratingNumber > 0 ? `1d12+${ratingNumber}d6` : '1d12'
+
+		// Include the weary and miserable status as markers in the label
+		let label = `${name}`
+		if (isWeary) label += ' --weary'
+		if (isMiserable) label += ' --miserable'
+
 		messageToApp({
 			message: 'send message',
 			data: {
-				payload: `/roll ${diceExpression} > ${attributeTargetNumber} ${name}`,
+				payload: `/roll ${diceExpression} > ${attributeTargetNumber} ${label}`,
 			},
 		})
 	}

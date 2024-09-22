@@ -8,21 +8,19 @@ export interface IAdversary {
 	parry: number
 	armour: number
 	combatProficiencies: {
-		primary: CombatProficiency
-		secondary: CombatProficiency
+		axes: CombatProficiency
+		bows: CombatProficiency
+		spears: CombatProficiency
+		swords: CombatProficiency
 	}
 	specialDamageOptions: string[]
 	fellAbilities: FellAbility[]
 	traits: string
+	strength: number
 }
 
 interface CombatProficiency {
-	name: string
 	rating: number
-	damage: number
-	injury: number
-	specialDamage: SpecialDamageOption[]
-	effect: string
 }
 
 export type SpecialDamageOption =

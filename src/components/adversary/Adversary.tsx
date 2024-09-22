@@ -37,11 +37,23 @@ export default function Adversary() {
 		name: 'combatProficiencies.primary',
 	})
 
+	const isWeary = useWatch({
+		control,
+		name: 'conditions.weary', // Ensure this path exists
+		defaultValue: false,
+	})
+
 	const handleAttack = () => {
+		const ratingNumber = combatProficiency.rating || 0
+		const diceExpression = ratingNumber > 0 ? `1d12+${ratingNumber}d6` : '1d12'
+		// Assuming adversaries might have a targetNumber to compare against
+		const targetNumber = attributeLevel || 0 // Replace with appropriate value
+		const label = `${combatProficiency.name || 'Attack'}${isWeary ? ' --weary' : ''}`
+
 		messageToApp({
 			message: 'send message',
 			data: {
-				payload: `/roll 1d12+${combatProficiency.rating}d6`,
+				payload: `/roll ${diceExpression} > ${targetNumber} ${label}`,
 			},
 		})
 	}

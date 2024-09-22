@@ -23,50 +23,14 @@ export interface ICharacter {
 		shadow: number
 		shadowScars: number
 	}
-	strength: {
-		targetNumber: number
-		rating: number
-		endurance: number
-		skills: {
-			awe: Skill
-			athletics: Skill
-			awareness: Skill
-			hunting: Skill
-			song: Skill
-			craft: Skill
-		}
-	}
-	heart: {
-		targetNumber: number
-		rating: number
-		hope: number
-		skills: {
-			enhearten: Skill
-			travel: Skill
-			insight: Skill
-			healing: Skill
-			courtesy: Skill
-			battle: Skill
-		}
-	}
-	wits: {
-		targetNumber: number
-		rating: number
-		parry: number
-		skills: {
-			persuade: Skill
-			stealth: Skill
-			scan: Skill
-			explore: Skill
-			riddle: Skill
-			lore: Skill
-		}
-	}
+	strength: Attribute
+	heart: Attribute
+	wits: Attribute
 	combatProficiencies: {
-		[key: string]: {
-			name: string
-			rating: string
-		}
+		axes: CombatProficiency
+		bows: CombatProficiency
+		spears: CombatProficiency
+		swords: CombatProficiency
 	}
 	rewards: {
 		rewards: string
@@ -111,7 +75,17 @@ export interface ICharacter {
 	}
 }
 
+interface CombatProficiency {
+	rating: number
+}
+
 export interface Skill {
 	rating: number
 	favorite: boolean
+}
+
+interface Attribute {
+	targetNumber: number
+	rating: number
+	// Add any other relevant fields
 }
