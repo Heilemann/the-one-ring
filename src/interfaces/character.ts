@@ -1,5 +1,5 @@
 export interface ICharacter {
-	name: string // Moved back to root level
+	name: string
 	basicInfo: {
 		heroicCulture: string
 		age: string
@@ -25,9 +25,9 @@ export interface ICharacter {
 		shadow: number
 		shadowScars: number
 	}
-	strength: Attribute
-	heart: Attribute
-	wits: Attribute
+	strength: Strength
+	heart: Heart
+	wits: Wits
 	combatProficiencies: {
 		axes: CombatProficiency
 		bows: CombatProficiency
@@ -89,5 +89,16 @@ export interface Skill {
 interface Attribute {
 	targetNumber: number
 	rating: number
-	// Add any other relevant fields
+}
+
+interface Strength extends Attribute {
+	endurance: number
+}
+
+interface Heart extends Attribute {
+	hope: number
+}
+
+interface Wits extends Attribute {
+	parry: number
 }
