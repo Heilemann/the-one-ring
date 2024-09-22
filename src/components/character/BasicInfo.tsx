@@ -13,7 +13,7 @@ const BasicInfo: React.FC = () => {
 			<Input
 				placeholder='Name'
 				centered
-				className='w-80 absolute left-1/2 top-14 transform -translate-x-1/2 text-xl font-bold'
+				className='w-80 absolute left-1/2 top-12 transform -translate-x-1/2 text-xl font-bold'
 				style={{
 					fontFamily: 'Aniron',
 					backgroundImage: 'none',

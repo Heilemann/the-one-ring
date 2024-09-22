@@ -37,7 +37,7 @@ const Character: React.FC = () => {
 			<HorizontalStripes />
 
 			<div
-				className='grid grid-cols-3 gap-12 mt-4'
+				className='grid grid-cols-3 gap-12'
 				style={{
 					backgroundImage: `url(${verticalstripes}), url(${verticalstripes})`,
 					backgroundSize: '10px 100%',

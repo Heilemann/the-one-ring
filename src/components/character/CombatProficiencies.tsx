@@ -34,7 +34,7 @@ const CombatProficiencies: React.FC = () => {
 	})
 
 	return (
-		<div className='mt-4'>
+		<div>
 			<MediumHeader>Combat Proficiencies</MediumHeader>
 			<div>
 				{weaponList.map(weapon => {

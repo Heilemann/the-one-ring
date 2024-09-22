@@ -9,20 +9,21 @@ const Rewards: React.FC = () => {
 	const { register } = useFormContext<ICharacter>()
 
 	return (
-		<div className='mt-4'>
-			<MediumHeader>Rewards</MediumHeader>
-			<div className='space-y-2'>
-				<TextArea
-					placeholder='List rewards...'
-					{...register('rewards.rewards')}
-				/>
-				<DiamondInput
-					label='Valour'
-					placeholder='—'
-					type='number'
-					{...register('rewards.valour', { valueAsNumber: true })}
-				/>
-			</div>
+		<div className='relative'>
+			<MediumHeader className='mt-2'>Rewards</MediumHeader>
+			<DiamondInput
+				label='Valour'
+				placeholder='—'
+				type='number'
+				className='absolute -top-4 right-0'
+				labelBelow
+				{...register('rewards.valour', { valueAsNumber: true })}
+			/>
+			<TextArea
+				className='mt-6'
+				placeholder='List rewards...'
+				{...register('rewards.rewards')}
+			/>
 		</div>
 	)
 }

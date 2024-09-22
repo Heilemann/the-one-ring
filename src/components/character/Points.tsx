@@ -6,7 +6,7 @@ import DiamondInput from '../DiamondInput'
 const Points: React.FC = () => {
 	const { register } = useFormContext<ICharacter>()
 	return (
-		<div className='grid grid-cols-3 gap-2'>
+		<div className='grid grid-rows-3 gap-6'>
 			<DiamondInput
 				label='Adventure'
 				labelSize='small'

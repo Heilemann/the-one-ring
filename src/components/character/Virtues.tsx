@@ -9,20 +9,21 @@ const Virtues: React.FC = () => {
 	const { register } = useFormContext<ICharacter>()
 
 	return (
-		<div className='mt-4'>
-			<MediumHeader>Virtues</MediumHeader>
-			<div className='space-y-2'>
-				<TextArea
-					placeholder='List virtues...'
-					{...register('virtues.virtues')}
-				/>
-				<DiamondInput
-					label='Wisdom'
-					placeholder='—'
-					type='number'
-					{...register('virtues.wisdom', { valueAsNumber: true })}
-				/>
-			</div>
+		<div className='relative'>
+			<MediumHeader className='mt-2'>Virtues</MediumHeader>
+			<DiamondInput
+				label='Wisdom'
+				placeholder='—'
+				type='number'
+				className='absolute -top-4 right-0'
+				labelBelow
+				{...register('virtues.wisdom', { valueAsNumber: true })}
+			/>
+			<TextArea
+				className='mt-6'
+				placeholder='List virtues...'
+				{...register('virtues.virtues')}
+			/>
 		</div>
 	)
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
-import Divider from '../BaseComponents/Divider'
 import LargeHeader from '../BaseComponents/LargeHeader'
 import DiamondInput from '../DiamondInput'
 
@@ -40,7 +39,6 @@ const CurrentEndurance: React.FC = () => {
 					/>
 				</div>
 			</div>
-			<Divider />
 		</div>
 	)
 }

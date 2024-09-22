@@ -92,6 +92,7 @@ const DiamondInput = forwardRef<HTMLInputElement, IDiamondInputProps>(
 						placeholder='—'
 						disabled={editMode === 'view'}
 						style={{
+							paddingTop: '0px',
 							paddingBottom: '0px',
 							backgroundImage: `url(${diamondImage})`,
 							backgroundSize: 'contain',
