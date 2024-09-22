@@ -15,7 +15,8 @@ const Rewards: React.FC = () => {
 				label='Valour'
 				placeholder='—'
 				type='number'
-				className='absolute -top-4 right-0'
+				className='absolute -top-2 -right-2'
+				inputClassName='w-10 h-10 text-base'
 				labelBelow
 				{...register('rewards.valour', { valueAsNumber: true })}
 			/>

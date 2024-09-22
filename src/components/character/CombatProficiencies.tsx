@@ -1,15 +1,15 @@
 import React from 'react'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import { ICharacter } from '../../interfaces/character'
 import useMessageToApp from '../BaseComponents/hooks/UseMessageToApp'
 import MediumHeader from '../BaseComponents/MediumHeader'
-import Input from '../Input'
+import CheckboxRating from '../CheckboxRating'
 
-const weaponList = ['Axes', 'Bows', 'Spears', 'Swords']
+const weaponList = ['axes', 'bows', 'spears', 'swords'] as const
 
 const CombatProficiencies: React.FC = () => {
-	const { register, control } = useFormContext<ICharacter>()
+	const { control } = useFormContext<ICharacter>()
 	const messageToApp = useMessageToApp()
 
 	// Watch the character's strength attribute target number
@@ -38,10 +38,9 @@ const CombatProficiencies: React.FC = () => {
 			<MediumHeader>Combat Proficiencies</MediumHeader>
 			<div>
 				{weaponList.map(weapon => {
-					// Watch the rating for this weapon
 					const rating = useWatch({
 						control,
-						name: `combatProficiencies.${weapon.toLowerCase()}.rating` as const,
+						name: `combatProficiencies.${weapon}.rating`,
 						defaultValue: 0,
 					})
 
@@ -66,8 +65,7 @@ const CombatProficiencies: React.FC = () => {
 					}
 
 					return (
-						<div key={weapon} className='flex items-center space-x-2'>
-							{/* Weapon Name */}
+						<div key={weapon} className='flex items-center space-x-2 space-y-1'>
 							<label
 								className={twMerge(
 									'text-black grow w-full cursor-pointer underline',
@@ -75,18 +73,19 @@ const CombatProficiencies: React.FC = () => {
 								)}
 								onClick={handleRoll}
 							>
-								{weapon}
+								{weapon.charAt(0).toUpperCase() + weapon.slice(1)}
 							</label>
 
 							{/* Rating Input */}
-							<Input
-								placeholder='Rating'
-								type='number'
-								{...register(
-									`combatProficiencies.${weapon.toLowerCase()}.rating`,
-									{
-										valueAsNumber: true,
-									},
+							<Controller
+								name={`combatProficiencies.${weapon}.rating`}
+								control={control}
+								defaultValue={0}
+								render={({ field }) => (
+									<CheckboxRating
+										value={Number(field.value)}
+										onChange={newValue => field.onChange(newValue)}
+									/>
 								)}
 							/>
 						</div>

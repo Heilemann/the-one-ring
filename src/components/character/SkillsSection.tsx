@@ -18,7 +18,7 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({
 	attributeTargetNumber,
 }) => {
 	return (
-		<div>
+		<div className='space-y-1'>
 			{skills.map(skill => (
 				<SkillItem
 					key={skill.name}

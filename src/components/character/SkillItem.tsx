@@ -3,7 +3,7 @@ import { Path, useFormContext, useWatch } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import { ICharacter } from '../../interfaces/character'
 import useMessageToApp from '../BaseComponents/hooks/UseMessageToApp'
-import Input from '../Input'
+import CheckboxRating from '../CheckboxRating'
 
 export interface SkillItemProps {
 	name: string
@@ -25,14 +25,12 @@ const SkillItem: React.FC<SkillItemProps> = ({
 		defaultValue: 0,
 	})
 
-	// Retrieve the weary condition
 	const isWeary = useWatch({
 		control,
 		name: 'conditions.weary',
 		defaultValue: false,
 	})
 
-	// **Retrieve the miserable condition**
 	const isMiserable = useWatch({
 		control,
 		name: 'conditions.miserable',
@@ -44,7 +42,6 @@ const SkillItem: React.FC<SkillItemProps> = ({
 		const ratingNumber = rating ? Number(rating) : 0
 		const diceExpression = ratingNumber > 0 ? `1d12+${ratingNumber}d6` : '1d12'
 
-		// Include the weary and miserable status as markers in the label
 		let label = `${name}`
 		if (isWeary) label += ' --weary'
 		if (isMiserable) label += ' --miserable'
@@ -72,13 +69,14 @@ const SkillItem: React.FC<SkillItemProps> = ({
 			>
 				{name}
 			</label>
-			<Input
-				className='w-10 text-center'
-				placeholder='—'
-				type='number'
-				{...register(`${path}.rating` as Path<ICharacter>, {
-					valueAsNumber: true,
-				})}
+			<CheckboxRating
+				value={Number(rating)}
+				onChange={newValue => {
+					// Update the form value
+					register(`${path}.rating` as Path<ICharacter>, {
+						value: newValue,
+					})
+				}}
 			/>
 		</div>
 	)
