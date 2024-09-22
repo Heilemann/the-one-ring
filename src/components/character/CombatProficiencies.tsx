@@ -12,21 +12,18 @@ const CombatProficiencies: React.FC = () => {
 	const { control } = useFormContext<ICharacter>()
 	const messageToApp = useMessageToApp()
 
-	// Watch the character's strength attribute target number
 	const strengthTargetNumber = useWatch({
 		control,
 		name: 'strength.targetNumber',
 		defaultValue: 0,
 	})
 
-	// Retrieve the weary condition
 	const isWeary = useWatch({
 		control,
 		name: 'conditions.weary',
 		defaultValue: false,
 	})
 
-	// **Retrieve the miserable condition**
 	const isMiserable = useWatch({
 		control,
 		name: 'conditions.miserable',

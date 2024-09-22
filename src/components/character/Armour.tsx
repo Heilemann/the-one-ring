@@ -2,12 +2,14 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
 import LabelInput from '../BaseComponents/LabelInput'
+import MediumHeader from '../BaseComponents/MediumHeader'
 
 const Armour: React.FC = () => {
 	const { register } = useFormContext<ICharacter>()
 
 	return (
 		<div className='flex flex-col gap-4'>
+			<MediumHeader>Armour</MediumHeader>
 			<div className='flex flex-row'>
 				<LabelInput
 					label='Armour'

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
-import StyledLabel from '../BaseComponents/Form/StyledLabel'
+import MediumHeader from '../BaseComponents/MediumHeader'
 import Input from '../Input'
 
 const TravellingGear: React.FC = () => {
@@ -12,8 +12,8 @@ const TravellingGear: React.FC = () => {
 	})
 
 	return (
-		<div className='mt-4 col-span-1'>
-			<StyledLabel>Travelling Gear</StyledLabel>
+		<div className='col-span-1'>
+			<MediumHeader>Travelling Gear</MediumHeader>
 			{fields.map((field, index) => (
 				<div key={field.id} className='mb-4'>
 					<div className='grid grid-cols-6 gap-2'>

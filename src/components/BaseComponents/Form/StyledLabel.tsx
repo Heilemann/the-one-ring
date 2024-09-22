@@ -12,7 +12,7 @@ export default function StyledLabel(props: IStyledLabelProps) {
 	return (
 		<label
 			className={twMerge(
-				'font-extrabold uppercase text-[#ba5450] pb-2',
+				'font-extrabold uppercase text-[#ba5450]',
 				centered && 'text-center',
 				className,
 			)}

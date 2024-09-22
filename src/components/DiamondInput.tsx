@@ -99,11 +99,16 @@ const DiamondInput = forwardRef<HTMLInputElement, IDiamondInputProps>(
 							backgroundRepeat: 'no-repeat',
 							backgroundPosition: 'center',
 							backgroundColor: 'transparent',
-							color: '#ba5450',
+							// color: '#ba5450',
 							...(rest.type === 'number' && {
 								appearance: 'none',
 								MozAppearance: 'textfield',
 								WebkitAppearance: 'none',
+							}),
+							...(diamondType === 'flourish' && {
+								fontFamily: 'Aniron',
+								fontSize: '30px',
+								lineHeight: '36px',
 							}),
 							...style,
 						}}

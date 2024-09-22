@@ -67,7 +67,7 @@ const Asset: FC<AssetProps> = props => {
 		<div
 			className={twMerge(
 				'relative flex max-w-xs items-center justify-center',
-				'min-h-8 min-w-8',
+				'min-h-8 min-w-8 group', // Added 'group' for hover effect
 				className,
 			)}
 			style={style}
@@ -76,11 +76,11 @@ const Asset: FC<AssetProps> = props => {
 				<div className='relative inline h-full w-full'>
 					<Button
 						className={twMerge(
-							'absolute right-1 top-1 mt-0 p-2',
+							'absolute right-1 top-1 mt-0 p-2 transition-opacity duration-300 opacity-0 group-hover:opacity-100',
 							editMode === 'view' ? 'hidden' : 'block',
 						)}
 						style={{
-							zIndex: 20, // Increased z-index
+							zIndex: 20,
 						}}
 						onClick={handleRemoveAsset}
 					>
@@ -98,7 +98,7 @@ const Asset: FC<AssetProps> = props => {
 				<div className='relative w-full h-full'>
 					<Button
 						className={twMerge(
-							'absolute right-1 top-1 mt-0 p-2',
+							'absolute right-1 top-1 mt-0 p-2 transition-opacity duration-300 opacity-0 group-hover:opacity-100',
 							editMode === 'view' ? 'hidden' : 'block',
 						)}
 						style={{

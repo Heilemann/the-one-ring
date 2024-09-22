@@ -64,7 +64,7 @@ const Character: React.FC = () => {
 
 			<HorizontalStripes />
 
-			<div className='grid grid-cols-4 gap-2'>
+			<div className='grid grid-cols-4 gap-8'>
 				<Points />
 				<CurrentEndurance />
 				<CurrentHope />
@@ -73,7 +73,7 @@ const Character: React.FC = () => {
 
 			<HorizontalStripes />
 
-			<div className='grid grid-cols-4 gap-2 mt-4'>
+			<div className='grid grid-cols-4 gap-8'>
 				<WarGear />
 				<Armour />
 				<TravellingGear />
