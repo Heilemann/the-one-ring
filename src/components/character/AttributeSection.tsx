@@ -1,6 +1,7 @@
 import React from 'react'
 import { Path, useFormContext, useWatch } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
+import Divider from '../BaseComponents/Divider'
 import LargeHeader from '../BaseComponents/LargeHeader'
 import DiamondInput from '../DiamondInput'
 import SkillsSection, { SkillListItem } from './SkillsSection'
@@ -28,44 +29,48 @@ const AttributeSection: React.FC<AttributeSectionProps> = ({
 	return (
 		<div className='space-y-2'>
 			<LargeHeader centered>{title}</LargeHeader>
-			<div className='grid grid-cols-3 grid-rows-2 gap-2'>
-				<DiamondInput
-					labelBelow={true}
-					centered={true}
-					label='TN'
-					placeholder='—'
-					type='number'
-					diamondType='flourish'
-					className='col-span-2 row-span-2 flex justify-center items-center'
-					{...register(`${lowerCaseTitle}.targetNumber` as Path<ICharacter>, {
-						valueAsNumber: true,
-					})}
-				/>
-				<DiamondInput
-					centered={true}
-					label='Rating'
-					placeholder='—'
-					type='number'
-					className='col-span-1 row-span-1'
-					{...register(`${lowerCaseTitle}.rating` as Path<ICharacter>, {
-						valueAsNumber: true,
-					})}
-				/>
-				<DiamondInput
-					labelBelow={true}
-					centered={true}
-					label={thirdInputLabel}
-					placeholder='—'
-					type='number'
-					className='col-span-1 row-span-1'
-					{...register(
-						`${lowerCaseTitle}.${thirdInputLabel.toLowerCase()}` as Path<ICharacter>,
-						{
+			<div className='m-auto w-36'>
+				<div className='relative inline-block'>
+					<DiamondInput
+						labelBelow={true}
+						centered={true}
+						label='TN'
+						placeholder='—'
+						type='number'
+						diamondType='flourish'
+						{...register(`${lowerCaseTitle}.targetNumber` as Path<ICharacter>, {
 							valueAsNumber: true,
-						},
-					)}
-				/>
+						})}
+					/>
+					<DiamondInput
+						centered={true}
+						label='Rating'
+						placeholder='—'
+						type='number'
+						className='absolute top-4 -right-10'
+						{...register(`${lowerCaseTitle}.rating` as Path<ICharacter>, {
+							valueAsNumber: true,
+						})}
+					/>
+					<DiamondInput
+						labelBelow={true}
+						centered={true}
+						label={thirdInputLabel}
+						placeholder='—'
+						type='number'
+						className='absolute bottom-3 -right-10'
+						{...register(
+							`${lowerCaseTitle}.${thirdInputLabel.toLowerCase()}` as Path<ICharacter>,
+							{
+								valueAsNumber: true,
+							},
+						)}
+					/>
+				</div>
 			</div>
+
+			<Divider />
+
 			<SkillsSection
 				title={title}
 				skills={skills}

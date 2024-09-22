@@ -2,8 +2,8 @@ import React from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import { ICharacter } from '../../interfaces/character'
-import StyledLabel from '../BaseComponents/Form/StyledLabel'
 import useMessageToApp from '../BaseComponents/hooks/UseMessageToApp'
+import MediumHeader from '../BaseComponents/MediumHeader'
 import Input from '../Input'
 
 const weaponList = ['Axes', 'Bows', 'Spears', 'Swords']
@@ -35,7 +35,7 @@ const CombatProficiencies: React.FC = () => {
 
 	return (
 		<div className='mt-4'>
-			<StyledLabel>Combat Proficiencies</StyledLabel>
+			<MediumHeader>Combat Proficiencies</MediumHeader>
 			<div>
 				{weaponList.map(weapon => {
 					// Watch the rating for this weapon

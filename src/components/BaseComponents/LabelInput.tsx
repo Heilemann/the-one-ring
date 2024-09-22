@@ -20,7 +20,7 @@ const LabelInput = forwardRef<HTMLInputElement, LabelInputProps>(
 
 		return (
 			<div className={twMerge('flex flex-col', className)}>
-				<label htmlFor={inputId} className='block text-xs font-bold mb-1'>
+				<label htmlFor={inputId} className='block text-xs mt-1 -mb-1'>
 					{label}
 				</label>
 				<Input

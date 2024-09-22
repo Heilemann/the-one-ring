@@ -21,7 +21,7 @@ const BasicInfo: React.FC = () => {
 				{...register('name')}
 			/>
 
-			<div className='grid grid-cols-8 gap-x-2 gap-y-0'>
+			<div className='grid grid-cols-8 gap-x-8 gap-y-0'>
 				<LabelInput
 					label='Heroic Culture'
 					{...register('basicInfo.heroicCulture')}
@@ -46,7 +46,7 @@ const BasicInfo: React.FC = () => {
 					name='token'
 					addLabel='Add Portrait'
 					removeLabel='Remove Portrait'
-					className='col-span-2 row-span-3 text-white'
+					className='col-span-2 row-span-3 text-white max-h-36'
 				/>
 
 				<LabelInput

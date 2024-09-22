@@ -2,6 +2,8 @@ import React from 'react'
 import bottomborder from '../../assets/bottomborder.png'
 import heroborder from '../../assets/heroborder.png'
 import verticalstripes from '../../assets/verticalstripes.png'
+import Divider from '../BaseComponents/Divider'
+import HorizontalStripes from '../BaseComponents/HorizontalStripes'
 import Armour from './Armour'
 import BasicInfo from './BasicInfo'
 import CombatProficiencies from './CombatProficiencies'
@@ -32,35 +34,45 @@ const Character: React.FC = () => {
 		>
 			<BasicInfo />
 
+			<HorizontalStripes />
+
 			<div
-				className='grid grid-cols-4 gap-12 mt-4'
+				className='grid grid-cols-3 gap-12 mt-4'
 				style={{
-					backgroundImage: `url(${verticalstripes}), url(${verticalstripes}), url(${verticalstripes})`,
+					backgroundImage: `url(${verticalstripes}), url(${verticalstripes})`,
 					backgroundSize: '10px 100%',
-					backgroundPosition:
-						'calc(25% - 12px) 0, calc(50%) 0, calc(75% + 12px) 0',
+					backgroundPosition: 'calc(33.33% - 12px) 0, calc(66.66% + 12px) 0',
 					backgroundRepeat: 'no-repeat',
 				}}
 			>
 				<div>
 					<Strength />
+					<Divider />
 					<CombatProficiencies />
 				</div>
 				<div>
 					<Heart />
+					<Divider />
 					<Rewards />
 				</div>
 				<div>
 					<Wits />
+					<Divider />
 					<Virtues />
 				</div>
-				<div>
-					<Points />
-					<CurrentEndurance />
-					<CurrentHope />
-					<Conditions />
-				</div>
 			</div>
+
+			<HorizontalStripes />
+
+			<div className='grid grid-cols-4 gap-2 mt-4'>
+				<Points />
+				<CurrentEndurance />
+				<CurrentHope />
+				<Conditions />
+			</div>
+
+			<HorizontalStripes />
+
 			<div className='grid grid-cols-4 gap-2 mt-4'>
 				<WarGear />
 				<Armour />

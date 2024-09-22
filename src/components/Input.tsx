@@ -4,8 +4,6 @@ import divider from '../assets/divider-red.png'
 import { useEditMode } from '../hooks/useEditMode'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-	value?: string
-	className?: string
 	centered?: boolean
 }
 
@@ -18,26 +16,29 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 				ref={ref}
 				type={type}
 				className={twMerge(
-					'bg-transparent focus:outline-none placeholder:text-[#ba5450]/50 w-full autofill:bg-transparent autofill:text-[#ba5450] autofill:shadow-[inset_0_0_0px_1000px_transparent] text-[#ba5450] transition-all duration-200 ease-in-out',
+					'bg-transparent w-full text-[#ba5450] transition-all duration-200 ease-in-out',
+					'focus:outline-none placeholder:text-[#ba5450]/50',
+					'autofill:bg-transparent autofill:text-[#ba5450] autofill:shadow-[inset_0_0_0px_1000px_transparent]',
 					'[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
 					centered && 'text-center',
 					rest.readOnly && 'cursor-pointer',
 					className,
 				)}
-				autoComplete='off'
-				autoCorrect='off'
-				autoCapitalize='off'
-				spellCheck='false'
 				style={{
 					backgroundRepeat: 'repeat-x',
-					backgroundPosition: 'bottom',
+					backgroundPosition: 'center calc(100% + 9px)',
 					backgroundColor: 'transparent',
 					...(editMode === 'edit' && {
-						paddingBottom: '16px',
+						paddingTop: '6px',
+						paddingBottom: '6px',
 						backgroundImage: `url(${divider})`,
 					}),
 					...style,
 				}}
+				autoComplete='off'
+				autoCorrect='off'
+				autoCapitalize='off'
+				spellCheck='false'
 				{...rest}
 			/>
 		)

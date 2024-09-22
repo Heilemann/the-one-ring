@@ -6,6 +6,7 @@ import { useEditMode } from '../hooks/useEditMode'
 import StyledLabel from './BaseComponents/Form/StyledLabel'
 import LargeHeader from './BaseComponents/LargeHeader'
 import MediumHeader from './BaseComponents/MediumHeader'
+import SmallHeader from './BaseComponents/SmallHeader'
 import Input from './Input'
 
 interface IDiamondInputProps
@@ -14,7 +15,7 @@ interface IDiamondInputProps
 	labelBelow?: boolean
 	centered?: boolean
 	inputClassName?: string
-	labelSize?: 'small' | 'medium' | 'large'
+	labelSize?: 'label' | 'small' | 'medium' | 'large'
 	diamondType?: 'small' | 'flourish'
 }
 
@@ -28,48 +29,64 @@ const DiamondInput = forwardRef<HTMLInputElement, IDiamondInputProps>(
 			centered = true,
 			inputClassName,
 			style,
-			labelSize = 'small',
+			labelSize = 'label',
 			diamondType = 'small',
 			...rest
 		},
 		ref,
 	) => {
 		const editMode = useEditMode()
+		const diamondImage =
+			diamondType === 'flourish' ? diamondWithFlourish : diamond
+
+		const labelClass = twMerge(
+			'absolute -translate-x-1/2 left-1/2 -translate-y-1/2 p-0',
+			labelBelow ? '-bottom-7' : '-top-3',
+			labelBelow && diamondType === 'flourish' && '-bottom-3',
+		)
 
 		const LabelComponent = () => {
 			switch (labelSize) {
+				case 'small':
+					return (
+						<SmallHeader centered={centered} className={labelClass}>
+							{label}
+						</SmallHeader>
+					)
 				case 'medium':
-					return <MediumHeader centered={centered}>{label}</MediumHeader>
+					return (
+						<MediumHeader centered={centered} className={labelClass}>
+							{label}
+						</MediumHeader>
+					)
 				case 'large':
-					return <LargeHeader centered={centered}>{label}</LargeHeader>
+					return (
+						<LargeHeader centered={centered} className={labelClass}>
+							{label}
+						</LargeHeader>
+					)
 				default:
 					return (
-						<StyledLabel centered={centered} htmlFor={rest.name}>
+						<StyledLabel
+							centered={centered}
+							htmlFor={rest.name}
+							className={labelClass}
+						>
 							{label}
 						</StyledLabel>
 					)
 			}
 		}
 
-		const diamondImage =
-			diamondType === 'flourish' ? diamondWithFlourish : diamond
-
 		return (
-			<div
-				className={twMerge(
-					'mb-1 flex flex-1',
-					labelBelow ? 'flex-col-reverse' : 'flex-col',
-					centered && 'items-center',
-					className,
-				)}
-			>
+			<div className={twMerge('relative mb-1 inline-block mx-auto', className)}>
 				<LabelComponent />
 				<div>
 					<Input
 						ref={ref}
 						className={twMerge(
 							'w-14 flex-1 bg-transparent transition-all duration-200 ease-in-out h-14 font-bold text-lg p-0 text-center',
-							diamondType === 'flourish' && 'w-36 h-36 pl-10 text-2xl',
+							diamondType === 'flourish' && 'w-36 h-36 pl-10 text-2xl -ml-10',
 							inputClassName,
 						)}
 						placeholder='—'

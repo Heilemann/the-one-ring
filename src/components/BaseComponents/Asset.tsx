@@ -66,50 +66,59 @@ const Asset: FC<AssetProps> = props => {
 	return (
 		<div
 			className={twMerge(
-				'relative flex max-w-xs items-center justify-center space-y-2',
+				'relative flex max-w-xs items-center justify-center',
+				'min-h-8 min-w-8',
 				className,
 			)}
 			style={style}
 		>
 			{asset.filetype.includes('image') && (
-				<div className='relative aspect-square object-contain'>
+				<div className='relative inline h-full w-full'>
+					<Button
+						className={twMerge(
+							'absolute right-1 top-1 mt-0 p-2',
+							editMode === 'view' ? 'hidden' : 'block',
+						)}
+						style={{
+							zIndex: 20, // Increased z-index
+						}}
+						onClick={handleRemoveAsset}
+					>
+						<TrashIcon className='h-4 w-4' />
+					</Button>{' '}
 					<img
 						alt='na'
 						src={origin + asset.fileurl}
-						className='relative z-10 h-full w-full rounded-lg object-contain'
+						className='relative z-10 w-full h-full rounded-lg object-contain'
 						style={mediaStyle}
-					/>
-					<div
-						className='absolute inset-0 z-0 bg-contain bg-center opacity-20 blur-xl'
-						style={{
-							backgroundImage: `url(${origin + asset.fileurl})`,
-						}}
 					/>
 				</div>
 			)}
 			{asset.filetype.includes('video') && (
-				<video
-					autoPlay={true}
-					loop={true}
-					muted={true}
-					playsInline={true}
-					src={origin + asset.fileurl}
-					className='object-contain'
-					style={mediaStyle}
-				/>
+				<div className='relative w-full h-full'>
+					<Button
+						className={twMerge(
+							'absolute right-1 top-1 mt-0 p-2',
+							editMode === 'view' ? 'hidden' : 'block',
+						)}
+						style={{
+							zIndex: 20, // Increased z-index
+						}}
+						onClick={handleRemoveAsset}
+					>
+						<TrashIcon className='h-4 w-4' />
+					</Button>{' '}
+					<video
+						autoPlay={true}
+						loop={true}
+						muted={true}
+						playsInline={true}
+						src={origin + asset.fileurl}
+						className='w-full h-full object-contain'
+						style={mediaStyle}
+					/>
+				</div>
 			)}
-			<Button
-				className={twMerge(
-					'absolute right-1 top-1 mt-0 p-2',
-					editMode === 'view' ? 'hidden' : 'block',
-				)}
-				style={{
-					zIndex: 100,
-				}}
-				onClick={handleRemoveAsset}
-			>
-				<TrashIcon className='h-4 w-4' />
-			</Button>
 		</div>
 	)
 }

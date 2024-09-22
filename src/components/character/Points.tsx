@@ -9,23 +9,23 @@ const Points: React.FC = () => {
 		<div className='grid grid-cols-3 gap-2'>
 			<DiamondInput
 				label='Adventure'
+				labelSize='small'
 				placeholder='—'
 				type='number'
-				labelSize='medium'
 				{...register('adventurePoints', { valueAsNumber: true })}
 			/>
 			<DiamondInput
 				label='Skill'
+				labelSize='small'
 				placeholder='—'
 				type='number'
-				labelSize='medium'
 				{...register('skillPoints', { valueAsNumber: true })}
 			/>
 			<DiamondInput
 				label='Fellowship'
+				labelSize='small'
 				placeholder='—'
 				type='number'
-				labelSize='medium'
 				{...register('fellowshipScore', { valueAsNumber: true })}
 			/>
 		</div>

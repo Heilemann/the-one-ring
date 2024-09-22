@@ -4,17 +4,20 @@ import { twMerge } from 'tailwind-merge'
 interface MediumHeaderProps {
 	children: React.ReactNode
 	centered?: boolean
+	className?: string
 }
 
 const MediumHeader: React.FC<MediumHeaderProps> = ({
 	children,
 	centered = false,
+	className,
 }) => {
 	return (
 		<h3
 			className={twMerge(
-				'text-xs font-bold text-[#ba5450]',
+				'text-base font-bold text-[#ba5450]',
 				centered && 'text-center',
+				className,
 			)}
 			style={{ fontFamily: 'Aniron' }}
 		>
