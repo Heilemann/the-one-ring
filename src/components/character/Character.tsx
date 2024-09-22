@@ -1,6 +1,7 @@
 import React from 'react'
 import bottomborder from '../../assets/bottomborder.png'
 import heroborder from '../../assets/heroborder.png'
+import verticalstripes from '../../assets/verticalstripes.png'
 import Armour from './Armour'
 import BasicInfo from './BasicInfo'
 import CombatProficiencies from './CombatProficiencies'
@@ -31,7 +32,16 @@ const Character: React.FC = () => {
 		>
 			<BasicInfo />
 
-			<div className='grid grid-cols-4 gap-2 mt-4'>
+			<div
+				className='grid grid-cols-4 gap-12 mt-4'
+				style={{
+					backgroundImage: `url(${verticalstripes}), url(${verticalstripes}), url(${verticalstripes})`,
+					backgroundSize: '10px 100%',
+					backgroundPosition:
+						'calc(25% - 12px) 0, calc(50%) 0, calc(75% + 12px) 0',
+					backgroundRepeat: 'no-repeat',
+				}}
+			>
 				<div>
 					<Strength />
 					<CombatProficiencies />

@@ -69,7 +69,7 @@ const DiamondInput = forwardRef<HTMLInputElement, IDiamondInputProps>(
 						ref={ref}
 						className={twMerge(
 							'w-14 flex-1 bg-transparent transition-all duration-200 ease-in-out h-14 font-bold text-lg p-0 text-center',
-							diamondType === 'flourish' && 'w-40 h-40 pl-10 text-2xl',
+							diamondType === 'flourish' && 'w-36 h-36 pl-10 text-2xl',
 							inputClassName,
 						)}
 						placeholder='—'
