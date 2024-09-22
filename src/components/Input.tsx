@@ -19,6 +19,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 				type={type}
 				className={twMerge(
 					'bg-transparent focus:outline-none placeholder:text-[#ba5450]/50 w-full autofill:bg-transparent autofill:text-[#ba5450] autofill:shadow-[inset_0_0_0px_1000px_transparent] text-[#ba5450] transition-all duration-200 ease-in-out',
+					'[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
 					centered && 'text-center',
 					rest.readOnly && 'cursor-pointer',
 					className,
