@@ -34,7 +34,6 @@ export type SpecialDamageOption =
 interface FellAbility {
 	name: string
 	description: string
-	cost: number
 }
 
 // Example usage:
@@ -70,7 +69,6 @@ export const exampleAdversary: IAdversary = {
 		{
 			name: 'Hideous Strength',
 			description: 'The Orc can perform feats of incredible strength',
-			cost: 1,
 		},
 	],
 	traits: 'Cunning',

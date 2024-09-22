@@ -1,5 +1,6 @@
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
+import bottomborder from '../../assets/bottomborder.png'
 import { useEditMode } from '../../hooks/useEditMode'
 import { IAdversary } from '../../interfaces/adversary'
 import Asset from '../BaseComponents/Asset'
@@ -16,7 +17,7 @@ export default function Adversary() {
 	const {
 		fields: fellAbilityFields,
 		append: appendFellAbility,
-		remove: removeFellAbility,
+		// remove: removeFellAbility, // Removed as it's not used
 	} = useFieldArray({
 		control,
 		name: 'fellAbilities',
@@ -58,13 +59,14 @@ export default function Adversary() {
 	})
 
 	// Compute total cost of fell abilities
-	const totalFellAbilityCost = fellAbilities.reduce((total, ability) => {
-		const cost = Number(ability.cost) || 0
-		return total + cost
-	}, 0)
+	// const totalFellAbilityCost = fellAbilities.reduce((total, ability) => {
+	//     const cost = Number(ability.cost) || 0
+	//     return total + cost
+	// }, 0)
 
 	// Calculate remaining Hate/Resolve points
-	const remainingHateOrResolve = hateOrResolve - totalFellAbilityCost
+	// const remainingHateOrResolve = hateOrResolve - totalFellAbilityCost
+	const remainingHateOrResolve = hateOrResolve
 
 	return (
 		<div>
@@ -235,33 +237,21 @@ export default function Adversary() {
 				)) && (
 				<div className='space-y-2 mt-8'>
 					{/* Header */}
-					<div className='grid grid-cols-6 gap-2'>
+					<div className='grid grid-cols-5 gap-2'>
 						<StyledLabel className='pb-0 col-span-2'>
 							Fell Abilities
-						</StyledLabel>
-						<StyledLabel className='pb-0 col-span-1 text-center'>
-							Cost
 						</StyledLabel>
 						<StyledLabel className='pb-0 col-span-3'>Description</StyledLabel>
 					</div>
 
 					{fellAbilityFields.map((field, index) => (
-						<div key={field.id} className='grid grid-cols-6 gap-2 items-start'>
+						<div key={field.id} className='grid grid-cols-5 gap-2 items-start'>
 							{/* Ability Name */}
 							<Input
 								className='col-span-2 text-black'
 								placeholder='—'
 								disabled={editMode === 'view'}
 								{...register(`fellAbilities.${index}.name`)}
-							/>
-
-							{/* Cost */}
-							<Input
-								type='number'
-								className='text-center col-span-1'
-								placeholder='—'
-								disabled={editMode === 'view'}
-								{...register(`fellAbilities.${index}.cost`)}
 							/>
 
 							{/* Description */}
@@ -271,17 +261,6 @@ export default function Adversary() {
 								disabled={editMode === 'view'}
 								{...register(`fellAbilities.${index}.description`)}
 							/>
-
-							{/* Remove Button (only in edit mode and if more than one ability) */}
-							{editMode === 'edit' && fellAbilityFields.length > 1 && (
-								<button
-									type='button'
-									onClick={() => removeFellAbility(index)}
-									className='text-red-500 col-span-6 text-right'
-								>
-									Remove Ability
-								</button>
-							)}
 						</div>
 					))}
 
@@ -289,9 +268,7 @@ export default function Adversary() {
 					{editMode === 'edit' && (
 						<button
 							type='button'
-							onClick={() =>
-								appendFellAbility({ name: '', description: '', cost: '' })
-							}
+							onClick={() => appendFellAbility({ name: '', description: '' })}
 							className='text-blue-500'
 						>
 							Add Ability
@@ -305,6 +282,17 @@ export default function Adversary() {
 				removeLabel='Remove Portrait'
 				className='mx-auto'
 			/>
+			<div
+				className='mt-4 h-20 -mx-8'
+				style={{
+					backgroundImage: `url(${bottomborder})`,
+					backgroundSize: 'auto 55px',
+					backgroundPosition: 'top 10px center',
+					backgroundRepeat: 'no-repeat',
+					minHeight: '100vh',
+					height: 'auto',
+				}}
+			></div>
 		</div>
 	)
 }
