@@ -9,7 +9,7 @@ interface HorizontalStripesProps {
 const HorizontalStripes: React.FC<HorizontalStripesProps> = ({ className }) => {
 	return (
 		<div
-			className={twMerge('h-20 -mx-10', className)}
+			className={twMerge('h-20 -mx-2', className)}
 			style={{
 				backgroundImage: `url(${horizontalstripes})`,
 				backgroundSize: '100% 15px',

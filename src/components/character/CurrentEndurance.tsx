@@ -1,21 +1,23 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
-import LargeHeader from '../BaseComponents/LargeHeader'
+import MediumHeader from '../BaseComponents/MediumHeader'
 import DiamondInput from '../DiamondInput'
 
 const CurrentEndurance: React.FC = () => {
-	const { register } = useFormContext<ICharacter>()
+	const { register, getValues } = useFormContext<ICharacter>()
+	const endurancePlaceholder = getValues('strength.endurance') || '—'
+
 	return (
 		<div className='space-y-2'>
-			<LargeHeader centered>Endurance</LargeHeader>
+			<MediumHeader centered>Endurance</MediumHeader>
 			<div className='m-auto w-36'>
 				<div className='relative inline-block'>
 					<DiamondInput
 						labelBelow={true}
 						centered={true}
 						label='Current'
-						placeholder='—'
+						placeholder={endurancePlaceholder.toString()}
 						type='number'
 						diamondType='flourish'
 						{...register('currentEndurance.endurance', { valueAsNumber: true })}

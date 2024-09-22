@@ -2,6 +2,7 @@ import React from 'react'
 import bottomborder from '../../assets/bottomborder.png'
 import heroborder from '../../assets/heroborder.png'
 import verticalstripes from '../../assets/verticalstripes.png'
+import Asset from '../BaseComponents/Asset'
 import Divider from '../BaseComponents/Divider'
 import HorizontalStripes from '../BaseComponents/HorizontalStripes'
 import Armour from './Armour'
@@ -11,7 +12,6 @@ import Conditions from './Conditions'
 import CurrentEndurance from './CurrentEndurance'
 import CurrentHope from './CurrentHope'
 import Heart from './Heart'
-import Points from './Points'
 import Rewards from './Rewards'
 import Strength from './Strength'
 import TravellingGear from './TravellingGear'
@@ -32,6 +32,15 @@ const Character: React.FC = () => {
 				height: 'auto',
 			}}
 		>
+			<div className='absolute top-6 left-8 w-20 h-20 rounded-full overflow-hidden'>
+				<Asset
+					name='token'
+					addLabel='Add Portrait'
+					removeLabel='Remove Portrait'
+					className='col-span-2 row-span-3 text-white max-h-36'
+				/>
+			</div>
+
 			<BasicInfo />
 
 			<HorizontalStripes />
@@ -64,8 +73,7 @@ const Character: React.FC = () => {
 
 			<HorizontalStripes />
 
-			<div className='grid grid-cols-4 gap-8'>
-				<Points />
+			<div className='grid grid-cols-3 gap-8'>
 				<CurrentEndurance />
 				<CurrentHope />
 				<Conditions />

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
-import LargeHeader from '../BaseComponents/LargeHeader'
+import MediumHeader from '../BaseComponents/MediumHeader'
 import Input from '../Input'
 
 const Conditions: React.FC = () => {
@@ -9,7 +9,7 @@ const Conditions: React.FC = () => {
 
 	return (
 		<div>
-			<LargeHeader centered>Conditions</LargeHeader>
+			<MediumHeader centered>Conditions</MediumHeader>
 			<div className='mt-4 space-y-2'>
 				<div className='flex items-center'>
 					<input

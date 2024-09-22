@@ -1,9 +1,9 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
-import Asset from '../BaseComponents/Asset'
 import LabelInput from '../BaseComponents/LabelInput'
 import Input from '../Input'
+import Points from './Points'
 
 const BasicInfo: React.FC = () => {
 	const { register } = useFormContext<ICharacter>()
@@ -42,12 +42,9 @@ const BasicInfo: React.FC = () => {
 					{...register('basicInfo.standardOfLiving')}
 					className='col-span-2'
 				/>
-				<Asset
-					name='token'
-					addLabel='Add Portrait'
-					removeLabel='Remove Portrait'
-					className='col-span-2 row-span-3 text-white max-h-36'
-				/>
+				<div className='col-span-2 row-span-3'>
+					<Points />
+				</div>
 
 				<LabelInput
 					label='Distinctive Features'

@@ -48,7 +48,7 @@ export interface ICharacter {
 		wounded: boolean
 		injury: string
 	}
-	travellingGear: string
+	travellingGear: TravellingGearItem[]
 	warGear: {
 		weapons: {
 			name: string
@@ -101,4 +101,10 @@ interface Heart extends Attribute {
 
 interface Wits extends Attribute {
 	parry: number
+}
+
+// Define and export TravellingGearItem type
+export interface TravellingGearItem {
+	item: string
+	load: number
 }

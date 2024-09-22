@@ -1,6 +1,7 @@
 import React from 'react'
-import { Path } from 'react-hook-form'
+import { Path, useFormContext, useWatch } from 'react-hook-form' // Added 'Path' to the import
 import { ICharacter } from '../../interfaces/character'
+import { getEffectiveTargetNumber } from '../../utils/getEffectiveTargetNumber' // Import the utility function
 import SkillItem from './SkillItem'
 
 export interface SkillListItem {
@@ -9,14 +10,29 @@ export interface SkillListItem {
 }
 
 interface SkillsSectionProps {
+	title: 'Strength' | 'Heart' | 'Wits'
 	skills: SkillListItem[]
-	attributeTargetNumber: number
 }
 
-const SkillsSection: React.FC<SkillsSectionProps> = ({
-	skills,
-	attributeTargetNumber,
-}) => {
+const SkillsSection: React.FC<SkillsSectionProps> = ({ title, skills }) => {
+	const { control } = useFormContext<ICharacter>()
+	const lowerCaseTitle = title.toLowerCase() as keyof ICharacter
+
+	// Define the Attribute type
+	interface Attribute {
+		rating?: number
+		targetNumber?: number
+	}
+
+	// Watch attribute values with correct typing
+	const attribute = useWatch<Attribute>({
+		control,
+		name: lowerCaseTitle as Path<ICharacter>,
+		defaultValue: {},
+	})
+
+	const effectiveTargetNumber = getEffectiveTargetNumber(attribute)
+
 	return (
 		<div className='space-y-1'>
 			{skills.map(skill => (
@@ -24,7 +40,7 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({
 					key={skill.name}
 					name={skill.name}
 					path={skill.path}
-					attributeTargetNumber={attributeTargetNumber}
+					attributeTargetNumber={effectiveTargetNumber}
 				/>
 			))}
 		</div>

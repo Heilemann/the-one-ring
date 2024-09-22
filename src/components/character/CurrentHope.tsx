@@ -1,21 +1,23 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
-import LargeHeader from '../BaseComponents/LargeHeader'
+import MediumHeader from '../BaseComponents/MediumHeader'
 import DiamondInput from '../DiamondInput'
 
 const CurrentHope: React.FC = () => {
-	const { register } = useFormContext<ICharacter>()
+	const { register, getValues } = useFormContext<ICharacter>()
+	const hopePlaceholder = getValues('heart.hope') || '—'
+
 	return (
 		<div className='space-y-2'>
-			<LargeHeader centered>Hope</LargeHeader>
+			<MediumHeader centered>Hope</MediumHeader>
 			<div className='m-auto w-36'>
 				<div className='relative inline-block'>
 					<DiamondInput
 						labelBelow={true}
 						centered={true}
 						label='Current'
-						placeholder='—'
+						placeholder={hopePlaceholder.toString()}
 						type='number'
 						diamondType='flourish'
 						{...register('currentHope.hope', { valueAsNumber: true })}

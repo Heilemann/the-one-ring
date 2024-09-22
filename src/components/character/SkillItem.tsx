@@ -1,6 +1,5 @@
 import React from 'react'
 import { Path, useFormContext, useWatch } from 'react-hook-form'
-import { twMerge } from 'tailwind-merge'
 import { ICharacter } from '../../interfaces/character'
 import useMessageToApp from '../BaseComponents/hooks/UseMessageToApp'
 import CheckboxRating from '../CheckboxRating'
@@ -61,10 +60,7 @@ const SkillItem: React.FC<SkillItemProps> = ({
 				{...register(`${path}.favorite` as Path<ICharacter>)}
 			/>
 			<label
-				className={twMerge(
-					'text-black grow w-full cursor-pointer underline',
-					'hover:text-blue-500 transition-colors',
-				)}
+				className='text-black grow w-full cursor-pointer hover:underline'
 				onClick={handleRoll}
 			>
 				{name}

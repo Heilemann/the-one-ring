@@ -1,6 +1,7 @@
-import React from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
-import { ICharacter } from '../../interfaces/character'
+import { isEqual, omit } from 'lodash'
+import React, { useEffect } from 'react'
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
+import { ICharacter, TravellingGearItem } from '../../interfaces/character'
 import MediumHeader from '../BaseComponents/MediumHeader'
 import Input from '../Input'
 
@@ -8,8 +9,33 @@ const TravellingGear: React.FC = () => {
 	const { control, register } = useFormContext<ICharacter>()
 	const { fields, append, remove } = useFieldArray({
 		control,
-		name: 'travellingGear.items',
+		name: 'travellingGear',
 	})
+
+	// Define an empty item for initialization
+	const emptyItem: TravellingGearItem = { item: '', load: 0 }
+
+	// Watch the items array
+	const items = useWatch({
+		control,
+		name: 'travellingGear',
+		defaultValue: [],
+	}) as TravellingGearItem[]
+
+	// Automatically add a new row when the last row is filled
+	useEffect(() => {
+		if (items.length === 0) {
+			append(emptyItem, { shouldFocus: false })
+			return
+		}
+
+		const lastItem = items[items.length - 1]
+		const lastRowIsDirty = !isEqual(omit(lastItem, 'id'), emptyItem)
+
+		if (lastRowIsDirty) {
+			append(emptyItem, { shouldFocus: false })
+		}
+	}, [items, append])
 
 	return (
 		<div className='col-span-1'>
@@ -20,32 +46,28 @@ const TravellingGear: React.FC = () => {
 						<Input
 							className='col-span-5'
 							placeholder='Item'
-							{...register(`travellingGear.items.${index}.item`)}
+							{...register(`travellingGear.${index}.item`)}
 						/>
 						<Input
 							type='number'
 							placeholder='Load'
-							{...register(`travellingGear.items.${index}.load`, {
+							{...register(`travellingGear.${index}.load`, {
 								valueAsNumber: true,
 							})}
 						/>
 					</div>
-					<button
-						type='button'
-						onClick={() => remove(index)}
-						className='text-red-500 mt-2'
-					>
-						Remove
-					</button>
+					{/* Only show the 'Remove' button for filled items */}
+					{index !== fields.length - 1 && (
+						<button
+							type='button'
+							onClick={() => remove(index)}
+							className='text-red-500 mt-2'
+						>
+							Remove
+						</button>
+					)}
 				</div>
 			))}
-			<button
-				type='button'
-				onClick={() => append({ item: '', load: 0 })}
-				className='text-blue-500'
-			>
-				Add Item
-			</button>
 		</div>
 	)
 }

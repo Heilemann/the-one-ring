@@ -2,7 +2,7 @@ import React from 'react'
 import { Path, useFormContext, useWatch } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
 import Divider from '../BaseComponents/Divider'
-import LargeHeader from '../BaseComponents/LargeHeader'
+import MediumHeader from '../BaseComponents/MediumHeader'
 import DiamondInput from '../DiamondInput'
 import SkillsSection, { SkillListItem } from './SkillsSection'
 
@@ -26,16 +26,24 @@ const AttributeSection: React.FC<AttributeSectionProps> = ({
 		defaultValue: 0,
 	})
 
+	const ratingValue = useWatch({
+		control,
+		name: `${lowerCaseTitle}.rating` as Path<ICharacter>,
+		defaultValue: 0,
+	})
+
+	const rating = Number(ratingValue) || 0
+
 	return (
-		<div className='space-y-2'>
-			<LargeHeader centered>{title}</LargeHeader>
+		<div>
+			<MediumHeader centered>{title}</MediumHeader>
 			<div className='m-auto w-36'>
 				<div className='relative inline-block'>
 					<DiamondInput
 						labelBelow={true}
 						centered={true}
 						label='TN'
-						placeholder='—'
+						placeholder={(20 - rating).toString()}
 						type='number'
 						diamondType='flourish'
 						{...register(`${lowerCaseTitle}.targetNumber` as Path<ICharacter>, {
@@ -48,6 +56,7 @@ const AttributeSection: React.FC<AttributeSectionProps> = ({
 						placeholder='—'
 						type='number'
 						className='absolute top-3 -right-9'
+						labelClass='translate-x-5 translate-y-0.5'
 						{...register(`${lowerCaseTitle}.rating` as Path<ICharacter>, {
 							valueAsNumber: true,
 						})}
@@ -59,6 +68,7 @@ const AttributeSection: React.FC<AttributeSectionProps> = ({
 						placeholder='—'
 						type='number'
 						className='absolute bottom-3 -right-9'
+						labelClass='translate-x-5 translate-y-0'
 						{...register(
 							`${lowerCaseTitle}.${thirdInputLabel.toLowerCase()}` as Path<ICharacter>,
 							{
@@ -74,7 +84,8 @@ const AttributeSection: React.FC<AttributeSectionProps> = ({
 			<SkillsSection
 				title={title}
 				skills={skills}
-				attributeTargetNumber={targetNumber}
+				// Ensure 'attributeTargetNumber' is a number
+				attributeTargetNumber={Number(targetNumber) || 0}
 			/>
 		</div>
 	)
