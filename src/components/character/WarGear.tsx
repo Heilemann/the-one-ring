@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
 import { FieldArrayWithId, useFormContext } from 'react-hook-form'
-import { twMerge } from 'tailwind-merge'
 import { useWeaponArray } from '../../hooks/useWeaponArray'
 import { ICharacter } from '../../interfaces/character'
 import StyledLabel from '../BaseComponents/Form/StyledLabel'
@@ -22,15 +21,14 @@ const WarGear: React.FC = () => {
 		[appendEmptyWeapon],
 	)
 
-	const columnClasses = 'grid grid-cols-6 gap-x-2'
-
 	return (
-		<div onDrop={handleDrop} className='col-span-2'>
-			<div className={twMerge('mb-0 mr-10 font-bold', columnClasses)}>
-				<StyledLabel className='col-span-3'>War Gear</StyledLabel>
+		<div onDrop={handleDrop}>
+			<div className='grid grid-cols-9 gap-2 mr-10'>
+				<StyledLabel className='col-span-2'>War Gear</StyledLabel>
 				<StyledLabel centered>Damage</StyledLabel>
 				<StyledLabel centered>Injury</StyledLabel>
 				<StyledLabel centered>Load</StyledLabel>
+				<StyledLabel className='col-span-4'>Notes</StyledLabel>
 			</div>
 
 			{fields.map(

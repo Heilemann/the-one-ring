@@ -13,6 +13,7 @@ const Armour: React.FC = () => {
 					label='Armour'
 					labelClassName='mt-0'
 					placeholder='—'
+					className='flex-grow'
 					{...register('armour.armour.name')}
 				/>
 				<LabelInput
@@ -20,6 +21,8 @@ const Armour: React.FC = () => {
 					labelClassName='mt-0'
 					type='number'
 					placeholder='—'
+					className='w-20'
+					centered
 					{...register('armour.armour.protection', { valueAsNumber: true })}
 				/>
 				<LabelInput
@@ -27,6 +30,8 @@ const Armour: React.FC = () => {
 					labelClassName='mt-0'
 					type='number'
 					placeholder='—'
+					className='w-20'
+					centered
 					{...register('armour.armour.load', { valueAsNumber: true })}
 				/>
 			</div>
@@ -34,18 +39,23 @@ const Armour: React.FC = () => {
 				<LabelInput
 					label='Helm'
 					placeholder='—'
+					className='flex-grow'
 					{...register('armour.helm.name')}
 				/>
 				<LabelInput
-					label='&nbsp;'
+					label='Protection'
 					type='number'
 					placeholder='—'
+					className='w-20'
+					centered
 					{...register('armour.helm.protection', { valueAsNumber: true })}
 				/>
 				<LabelInput
-					label='&nbsp;'
+					label='Load'
 					type='number'
 					placeholder='—'
+					className='w-20'
+					centered
 					{...register('armour.helm.load', { valueAsNumber: true })}
 				/>
 			</div>
@@ -53,18 +63,23 @@ const Armour: React.FC = () => {
 				<LabelInput
 					label='Shield'
 					placeholder='—'
+					className='flex-grow'
 					{...register('armour.shield.name')}
 				/>
 				<LabelInput
 					label='Parry'
 					type='number'
 					placeholder='—'
+					className='w-20'
+					centered
 					{...register('armour.shield.parry', { valueAsNumber: true })}
 				/>
 				<LabelInput
 					label='Load'
 					type='number'
 					placeholder='—'
+					className='w-20'
+					centered
 					{...register('armour.shield.load', { valueAsNumber: true })}
 				/>
 			</div>

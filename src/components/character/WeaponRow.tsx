@@ -1,8 +1,7 @@
-import { XMarkIcon } from '@heroicons/react/24/solid'
 import React from 'react'
 import { UseFormRegister } from 'react-hook-form'
-import { twMerge } from 'tailwind-merge'
 import { ICharacter } from '../../interfaces/character'
+import RemoveRowButton from '../BaseComponents/RemoveRowButton'
 import Input from '../Input'
 
 interface WeaponRowProps {
@@ -14,14 +13,12 @@ interface WeaponRowProps {
 
 const WeaponRow: React.FC<WeaponRowProps> = React.memo(
 	({ index, register, remove, isLast }) => {
-		const columnClasses = 'grid grid-cols-6 gap-x-2'
-
 		return (
-			<div className='flex items-start mb-4'>
-				<div className={twMerge(columnClasses, 'flex-grow')}>
+			<div className='relative'>
+				<div className='grid grid-cols-9 gap-2 pr-10'>
 					<Input
 						placeholder='Name...'
-						className='col-span-3'
+						className='col-span-2'
 						{...register(`warGear.weapons.${index}.name`)}
 					/>
 					<Input
@@ -50,20 +47,11 @@ const WeaponRow: React.FC<WeaponRowProps> = React.memo(
 					/>
 					<Input
 						placeholder='Notes...'
-						className='col-span-6'
+						className='col-span-4'
 						{...register(`warGear.weapons.${index}.notes`)}
 					/>
 				</div>
-				{!isLast && (
-					<button
-						type='button'
-						onClick={() => remove(index)}
-						className='text-red-700 bg-red-500/10 h-8 w-8 flex-shrink-0 flex items-center justify-center rounded-full ml-2'
-					>
-						<XMarkIcon className='w-4 h-4' />
-					</button>
-				)}
-				{isLast && <div className='h-8 w-8 flex-shrink-0 ml-2' />}
+				<RemoveRowButton onClick={() => remove(index)} isVisible={!isLast} />
 			</div>
 		)
 	},

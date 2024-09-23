@@ -73,7 +73,15 @@ const Character: React.FC = () => {
 
 			<HorizontalStripes />
 
-			<div className='grid grid-cols-3 gap-8'>
+			<div
+				className='grid grid-cols-3 gap-12'
+				style={{
+					backgroundImage: `url(${verticalstripes}), url(${verticalstripes})`,
+					backgroundSize: '10px 100%',
+					backgroundPosition: 'calc(33.33% - 12px) 0, calc(66.66% + 12px) 0',
+					backgroundRepeat: 'no-repeat',
+				}}
+			>
 				<CurrentEndurance />
 				<CurrentHope />
 				<Conditions />
@@ -81,7 +89,7 @@ const Character: React.FC = () => {
 
 			<HorizontalStripes />
 
-			<div className='grid grid-cols-3 gap-8'>
+			<div className='space-y-8'>
 				<WarGear />
 				<Armour />
 				<TravellingGear />

@@ -2,7 +2,8 @@ import { isEqual, omit } from 'lodash'
 import React, { useEffect } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { ICharacter, TravellingGearItem } from '../../interfaces/character'
-import MediumHeader from '../BaseComponents/MediumHeader'
+import StyledLabel from '../BaseComponents/Form/StyledLabel'
+import RemoveRowButton from '../BaseComponents/RemoveRowButton'
 import Input from '../Input'
 
 const TravellingGear: React.FC = () => {
@@ -39,10 +40,13 @@ const TravellingGear: React.FC = () => {
 
 	return (
 		<div className='col-span-1'>
-			<MediumHeader>Travelling Gear</MediumHeader>
+			<div className='grid grid-cols-6 gap-2 mr-10'>
+				<StyledLabel className='col-span-5'>Travelling Gear</StyledLabel>
+				<StyledLabel>Load</StyledLabel>
+			</div>
 			{fields.map((field, index) => (
-				<div key={field.id} className='mb-4'>
-					<div className='grid grid-cols-6 gap-2'>
+				<div key={field.id} className='relative'>
+					<div className='grid grid-cols-6 gap-2 pr-10'>
 						<Input
 							className='col-span-5'
 							placeholder='Item'
@@ -56,16 +60,10 @@ const TravellingGear: React.FC = () => {
 							})}
 						/>
 					</div>
-					{/* Only show the 'Remove' button for filled items */}
-					{index !== fields.length - 1 && (
-						<button
-							type='button'
-							onClick={() => remove(index)}
-							className='text-red-500 mt-2'
-						>
-							Remove
-						</button>
-					)}
+					<RemoveRowButton
+						onClick={() => remove(index)}
+						isVisible={index !== fields.length - 1}
+					/>
 				</div>
 			))}
 		</div>
