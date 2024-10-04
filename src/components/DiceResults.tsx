@@ -79,16 +79,16 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 		const isElevenOnD12 = roll.die === 12 && roll.value === 11
 		const isTwelveOnD12 = roll.die === 12 && roll.value === 12
 
-		// Determine if the roll is low on d6 and should be colored red when weary
+		// Determine if the roll is low on d6 and should be colored when weary
 		const isLowOnD6Weary =
 			isWeary && roll.die === 6 && [1, 2, 3].includes(roll.value)
 
 		// Build class names for the die
 		const dieClass = twMerge(
-			'flex text-xl flex-col items-center justify-center bg-white/10',
+			'flex text-xl flex-col items-center justify-center',
 			dieType === 'd6' ? 'rounded-md h-6 w-6' : 'rounded-full h-7 w-7',
-			isSixOnD6 && 'bg-white text-black', // Highlight if d6 rolled a 6
-			isLowOnD6Weary && 'text-red-500', // Color the die red if weary and value is 1-3
+			isLowOnD6Weary ? 'bg-red-800' : 'bg-white/10',
+			isSixOnD6 && 'bg-white text-black',
 		)
 
 		return (

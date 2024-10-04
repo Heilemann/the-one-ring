@@ -1,8 +1,9 @@
 import React from 'react'
 import { Path, useFormContext, useWatch } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
-import useMessageToApp from '../BaseComponents/hooks/UseMessageToApp'
 import CheckboxRating from '../CheckboxRating'
+import RollModal from './RollModal'
+import useRollModal from './hooks/useRollModal'
 
 export interface SkillItemProps {
 	name: string
@@ -16,7 +17,6 @@ const SkillItem: React.FC<SkillItemProps> = ({
 	attributeTargetNumber,
 }) => {
 	const { register, control, setValue } = useFormContext<ICharacter>()
-	const messageToApp = useMessageToApp()
 
 	const rating = useWatch({
 		control,
@@ -36,22 +36,14 @@ const SkillItem: React.FC<SkillItemProps> = ({
 		defaultValue: false,
 	})
 
-	const handleRoll = (e: React.MouseEvent<HTMLLabelElement>) => {
-		e.preventDefault()
-		const ratingNumber = rating ? Number(rating) : 0
-		const diceExpression = ratingNumber > 0 ? `1d12+${ratingNumber}d6` : '1d12'
+	const isWounded = useWatch({
+		control,
+		name: 'conditions.wounded',
+		defaultValue: false,
+	})
 
-		let label = `${name}`
-		if (isWeary) label += ' --weary'
-		if (isMiserable) label += ' --miserable'
-
-		messageToApp({
-			message: 'send message',
-			data: {
-				payload: `/roll ${diceExpression} > ${attributeTargetNumber} ${label}`,
-			},
-		})
-	}
+	const { isOpen, formula, label, openRollModal, closeRollModal } =
+		useRollModal(attributeTargetNumber, isWeary, isMiserable, isWounded)
 
 	return (
 		<div className='flex items-center gap-2'>
@@ -61,7 +53,7 @@ const SkillItem: React.FC<SkillItemProps> = ({
 			/>
 			<label
 				className='text-black grow w-full cursor-pointer hover:underline'
-				onClick={handleRoll}
+				onClick={() => openRollModal(name, Number(rating))}
 			>
 				{name}
 			</label>
@@ -70,6 +62,12 @@ const SkillItem: React.FC<SkillItemProps> = ({
 				onChange={newValue => {
 					setValue(`${path}.rating` as Path<ICharacter>, newValue)
 				}}
+			/>
+			<RollModal
+				isOpen={isOpen}
+				onClose={closeRollModal}
+				initialFormula={formula}
+				label={label}
 			/>
 		</div>
 	)
