@@ -6,22 +6,19 @@ import { IAdversary } from '../../interfaces/adversary'
 import Asset from '../BaseComponents/Asset'
 import StyledLabel from '../BaseComponents/Form/StyledLabel'
 import TextArea from '../BaseComponents/Form/Textarea'
-import useMessageToApp from '../BaseComponents/hooks/UseMessageToApp'
 import DiamondInput from '../DiamondInput'
 import Input from '../Input'
+import RollModal from '../character/RollModal'
+import useRollModal from '../character/hooks/useRollModal'
 
 export default function Adversary() {
 	const editMode = useEditMode()
-	const messageToApp = useMessageToApp()
 	const { register, control } = useFormContext<IAdversary>()
-	const {
-		fields: fellAbilityFields,
-		append: appendFellAbility,
-		// remove: removeFellAbility, // Removed as it's not used
-	} = useFieldArray({
-		control,
-		name: 'fellAbilities',
-	})
+	const { fields: fellAbilityFields, append: appendFellAbility } =
+		useFieldArray({
+			control,
+			name: 'fellAbilities',
+		})
 
 	const fellAbilities =
 		useWatch({
@@ -32,30 +29,30 @@ export default function Adversary() {
 		control,
 		name: 'description',
 	})
-	const combatProficiency = useWatch({
+
+	const attributeLevel = useWatch({
 		control,
-		name: 'combatProficiencies.primary',
+		name: 'attributeLevel',
 	})
 
-	const isWeary = useWatch({
-		control,
-		name: 'conditions.weary', // Ensure this path exists
-		defaultValue: false,
-	})
+	const {
+		isOpen,
+		formula,
+		label,
+		openRollModal,
+		closeRollModal,
+		updateFormula,
+	} = useRollModal()
 
-	const handleAttack = () => {
-		const ratingNumber = combatProficiency.rating || 0
-		const diceExpression = ratingNumber > 0 ? `1d12+${ratingNumber}d6` : '1d12'
-		// Assuming adversaries might have a targetNumber to compare against
-		const targetNumber = attributeLevel || 0 // Replace with appropriate value
-		const label = `${combatProficiency.name || 'Attack'}${isWeary ? ' --weary' : ''}`
-
-		messageToApp({
-			message: 'send message',
-			data: {
-				payload: `/roll ${diceExpression} > ${targetNumber} ${label}`,
-			},
-		})
+	const handleAttack = (weaponType: 'primary' | 'secondary') => {
+		const name = control._getWatch(
+			`combatProficiencies.${weaponType}.name`,
+		) as string
+		const rating = control._getWatch(
+			`combatProficiencies.${weaponType}.rating`,
+		) as number
+		console.log(`Attacking with ${name}, rating: ${rating}`) // Debug log
+		openRollModal(name, rating)
 	}
 
 	// Watch hateOrResolve as a number
@@ -184,7 +181,7 @@ export default function Adversary() {
 							editMode === 'view' && 'cursor-pointer underline',
 						)}
 						readOnly={editMode === 'view'}
-						onClick={editMode === 'view' ? handleAttack : undefined}
+						onClick={() => editMode === 'view' && handleAttack('primary')}
 						{...register('combatProficiencies.primary.rating')}
 					/>
 					<Input
@@ -218,7 +215,7 @@ export default function Adversary() {
 							editMode === 'view' && 'cursor-pointer underline',
 						)}
 						readOnly={editMode === 'view'}
-						onClick={editMode === 'view' ? handleAttack : undefined}
+						onClick={() => editMode === 'view' && handleAttack('secondary')}
 						{...register('combatProficiencies.secondary.rating')}
 					/>
 					<Input
@@ -244,9 +241,7 @@ export default function Adversary() {
 			{/* Conditionally render Fell Abilities section */}
 			{/* {(editMode === 'edit' || */}
 			{(true ||
-				fellAbilities.some(
-					ability => ability.name || ability.description || ability.cost !== 0,
-				)) && (
+				fellAbilities.some(ability => ability.name || ability.description)) && (
 				<div className='space-y-2 mt-8'>
 					{/* Header */}
 					<div className='grid grid-cols-5 gap-2'>
@@ -303,6 +298,13 @@ export default function Adversary() {
 					backgroundRepeat: 'no-repeat',
 				}}
 			></div>
+			<RollModal
+				isOpen={isOpen}
+				onClose={closeRollModal}
+				initialFormula={formula}
+				label={label}
+				updateFormula={updateFormula}
+			/>
 		</div>
 	)
 }

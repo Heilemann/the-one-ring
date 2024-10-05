@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import { ICharacter } from '../../../interfaces/character'
-import { getEffectiveTargetNumber } from '../../../utils/getEffectiveTargetNumber'
 
 interface RollModalState {
 	isOpen: boolean
@@ -8,14 +6,7 @@ interface RollModalState {
 	label: string
 }
 
-type StrengthOrTargetNumber = ICharacter['strength'] | number
-
-const useRollModal = (
-	strengthOrTargetNumber: StrengthOrTargetNumber,
-	isWeary: boolean,
-	isMiserable: boolean,
-	isWounded: boolean,
-) => {
+const useRollModal = () => {
 	const [modalState, setModalState] = useState<RollModalState>({
 		isOpen: false,
 		formula: '',
@@ -23,24 +14,13 @@ const useRollModal = (
 	})
 
 	const openRollModal = (name: string, rating: number) => {
-		const ratingNumber = rating ? Number(rating) : 0
+		const ratingNumber = Number(rating) || 0
 		const diceExpression = ratingNumber > 0 ? `1d12+${ratingNumber}d6` : '1d12'
-		const effectiveTargetNumber =
-			typeof strengthOrTargetNumber === 'number'
-				? strengthOrTargetNumber
-				: getEffectiveTargetNumber(strengthOrTargetNumber)
-
-		const formula = `${diceExpression} > ${effectiveTargetNumber}`
-
-		let label = `${name}`
-		if (isWeary) label += ' --weary'
-		if (isMiserable) label += ' --miserable'
-		if (isWounded) label += ' --wounded'
 
 		setModalState({
 			isOpen: true,
-			formula,
-			label,
+			formula: diceExpression,
+			label: `${name}`,
 		})
 	}
 
@@ -48,10 +28,15 @@ const useRollModal = (
 		setModalState(prev => ({ ...prev, isOpen: false }))
 	}
 
+	const updateFormula = (newFormula: string) => {
+		setModalState(prev => ({ ...prev, formula: newFormula }))
+	}
+
 	return {
 		...modalState,
 		openRollModal,
 		closeRollModal,
+		updateFormula,
 	}
 }
 

@@ -3,6 +3,7 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { ICharacter } from '../../interfaces/character'
 import MediumHeader from '../BaseComponents/MediumHeader'
 import CheckboxRating from '../CheckboxRating'
+import CombatStanceSelector from './CombatStanceSelector'
 import RollModal from './RollModal'
 import useRollModal from './hooks/useRollModal'
 
@@ -34,12 +35,25 @@ const CombatProficiencies: React.FC = () => {
 		defaultValue: false,
 	})
 
+	const combatStance = useWatch({
+		control,
+		name: 'combatStance',
+		defaultValue: 'open',
+	})
+
 	const { isOpen, formula, label, openRollModal, closeRollModal } =
-		useRollModal(strengthAttribute, isWeary, isMiserable, isWounded)
+		useRollModal(
+			strengthAttribute,
+			isWeary,
+			isMiserable,
+			isWounded,
+			combatStance,
+		)
 
 	return (
 		<div>
 			<MediumHeader>Combat Proficiencies</MediumHeader>
+			<CombatStanceSelector />
 			<div>
 				{weaponList.map(weapon => {
 					const rating = useWatch({
@@ -47,7 +61,6 @@ const CombatProficiencies: React.FC = () => {
 						name: `combatProficiencies.${weapon}.rating`,
 						defaultValue: 0,
 					})
-
 					return (
 						<div key={weapon} className='flex items-center space-x-2 space-y-3'>
 							<label
@@ -57,7 +70,6 @@ const CombatProficiencies: React.FC = () => {
 								{weapon.charAt(0).toUpperCase() + weapon.slice(1)}
 							</label>
 
-							{/* Rating Input */}
 							<Controller
 								name={`combatProficiencies.${weapon}.rating`}
 								control={control}

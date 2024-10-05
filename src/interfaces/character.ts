@@ -75,6 +75,7 @@ export interface ICharacter {
 			load: number
 		}
 	}
+	combatStance: 'forward' | 'open' | 'defensive' | 'rearward'
 }
 
 interface CombatProficiency {
