@@ -17,21 +17,22 @@ const useRollModal = () => {
 		isIllFavoured: false,
 	})
 
-	const openRollModal = (
-		name: string,
-		rating: number,
-		isFavoured: boolean = false,
-	) => {
-		const ratingNumber = Number(rating) || 0
-		const diceExpression = ratingNumber > 0 ? `1d12+${ratingNumber}d6` : '1d12'
+	const [modifier, setModifier] = useState(0)
 
+	const openRollModal = (
+		weapon: string,
+		rating: number,
+		isFavorite: boolean,
+		mod: number = 0,
+	) => {
 		setModalState({
 			isOpen: true,
-			formula: diceExpression,
-			label: `${name}`,
-			isFavoured: isFavoured,
+			formula: `${isFavorite ? '2d12kh1' : '1d12'} + ${rating}${mod !== 0 ? ` + ${mod}` : ''}`,
+			label: `${weapon.charAt(0).toUpperCase() + weapon.slice(1)} (${rating})`,
+			isFavoured: isFavorite,
 			isIllFavoured: false,
 		})
+		setModifier(mod)
 	}
 
 	const closeRollModal = () => {
@@ -65,6 +66,8 @@ const useRollModal = () => {
 		updateFormula,
 		toggleFavoured,
 		toggleIllFavoured,
+		modifier,
+		setModifier,
 	}
 }
 

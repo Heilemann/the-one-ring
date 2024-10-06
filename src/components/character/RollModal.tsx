@@ -12,6 +12,8 @@ interface RollModalProps {
 	isIllFavoured: boolean
 	toggleFavoured: () => void
 	toggleIllFavoured: () => void
+	modifier: number
+	setModifier: (value: number) => void
 }
 
 const RollModal: React.FC<RollModalProps> = ({
@@ -24,6 +26,8 @@ const RollModal: React.FC<RollModalProps> = ({
 	isIllFavoured,
 	toggleFavoured,
 	toggleIllFavoured,
+	modifier,
+	setModifier,
 }) => {
 	const [formula, setFormula] = useState(initialFormula)
 	const messageToApp = useMessageToApp()
@@ -100,6 +104,27 @@ const RollModal: React.FC<RollModalProps> = ({
 
 	if (!isOpen) return null
 
+	const handleModifierChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const newModifier = parseInt(e.target.value) || 0
+		setModifier(newModifier)
+
+		// Update the formula with the new modifier
+		const formulaParts = formula.split('+').map(part => part.trim())
+		const lastPart = formulaParts[formulaParts.length - 1]
+
+		if (lastPart.match(/^-?\d+$/)) {
+			formulaParts.pop()
+		}
+
+		if (newModifier !== 0) {
+			formulaParts.push(newModifier.toString())
+		}
+
+		const newFormula = formatFormula(formulaParts.join(' + '))
+		setFormula(newFormula)
+		updateFormula(newFormula)
+	}
+
 	return (
 		<div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
 			<div className='bg-white p-6 rounded-lg'>
@@ -152,6 +177,17 @@ const RollModal: React.FC<RollModalProps> = ({
 							className='mr-2'
 						/>
 						Ill-favoured
+					</label>
+				</div>
+				<div className='flex justify-between items-center mb-4'>
+					<label className='flex items-center'>
+						Modifier:
+						<input
+							type='number'
+							value={modifier}
+							onChange={handleModifierChange}
+							className='ml-2 w-16 p-1 border rounded'
+						/>
 					</label>
 				</div>
 				{conditions.length > 0 && (
