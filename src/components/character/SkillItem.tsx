@@ -42,8 +42,22 @@ const SkillItem: React.FC<SkillItemProps> = ({
 		defaultValue: false,
 	})
 
-	const { isOpen, formula, label, openRollModal, closeRollModal } =
-		useRollModal(attributeTargetNumber, isWeary, isMiserable, isWounded)
+	const {
+		isOpen,
+		formula,
+		label,
+		openRollModal,
+		closeRollModal,
+		updateFormula,
+		isFavoured,
+		isIllFavoured,
+		toggleFavoured,
+		toggleIllFavoured,
+	} = useRollModal()
+
+	const handleOpenRollModal = () => {
+		openRollModal(name, Number(rating))
+	}
 
 	return (
 		<div className='flex items-center gap-2'>
@@ -53,7 +67,7 @@ const SkillItem: React.FC<SkillItemProps> = ({
 			/>
 			<label
 				className='text-black grow w-full cursor-pointer hover:underline'
-				onClick={() => openRollModal(name, Number(rating))}
+				onClick={handleOpenRollModal}
 			>
 				{name}
 			</label>
@@ -68,6 +82,11 @@ const SkillItem: React.FC<SkillItemProps> = ({
 				onClose={closeRollModal}
 				initialFormula={formula}
 				label={label}
+				updateFormula={updateFormula}
+				isFavoured={isFavoured}
+				isIllFavoured={isIllFavoured}
+				toggleFavoured={toggleFavoured}
+				toggleIllFavoured={toggleIllFavoured}
 			/>
 		</div>
 	)

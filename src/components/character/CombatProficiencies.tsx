@@ -41,14 +41,22 @@ const CombatProficiencies: React.FC = () => {
 		defaultValue: 'open',
 	})
 
-	const { isOpen, formula, label, openRollModal, closeRollModal } =
-		useRollModal(
-			strengthAttribute,
-			isWeary,
-			isMiserable,
-			isWounded,
-			combatStance,
-		)
+	const {
+		isOpen,
+		formula,
+		label,
+		openRollModal,
+		closeRollModal,
+		updateFormula,
+		isFavoured,
+		isIllFavoured,
+		toggleFavoured,
+		toggleIllFavoured,
+	} = useRollModal()
+
+	const handleOpenRollModal = (weapon: string, rating: number) => {
+		openRollModal(weapon, rating)
+	}
 
 	return (
 		<div>
@@ -65,7 +73,7 @@ const CombatProficiencies: React.FC = () => {
 						<div key={weapon} className='flex items-center space-x-2 space-y-3'>
 							<label
 								className='text-black grow w-full cursor-pointer hover:underline'
-								onClick={() => openRollModal(weapon, rating)}
+								onClick={() => handleOpenRollModal(weapon, rating)}
 							>
 								{weapon.charAt(0).toUpperCase() + weapon.slice(1)}
 							</label>
@@ -90,6 +98,11 @@ const CombatProficiencies: React.FC = () => {
 				onClose={closeRollModal}
 				initialFormula={formula}
 				label={label}
+				updateFormula={updateFormula}
+				isFavoured={isFavoured}
+				isIllFavoured={isIllFavoured}
+				toggleFavoured={toggleFavoured}
+				toggleIllFavoured={toggleIllFavoured}
 			/>
 		</div>
 	)

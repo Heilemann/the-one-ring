@@ -4,6 +4,8 @@ interface RollModalState {
 	isOpen: boolean
 	formula: string
 	label: string
+	isFavoured: boolean
+	isIllFavoured: boolean
 }
 
 const useRollModal = () => {
@@ -11,6 +13,8 @@ const useRollModal = () => {
 		isOpen: false,
 		formula: '',
 		label: '',
+		isFavoured: false,
+		isIllFavoured: false,
 	})
 
 	const openRollModal = (name: string, rating: number) => {
@@ -21,6 +25,8 @@ const useRollModal = () => {
 			isOpen: true,
 			formula: diceExpression,
 			label: `${name}`,
+			isFavoured: false,
+			isIllFavoured: false,
 		})
 	}
 
@@ -32,11 +38,29 @@ const useRollModal = () => {
 		setModalState(prev => ({ ...prev, formula: newFormula }))
 	}
 
+	const toggleFavoured = () => {
+		setModalState(prev => ({
+			...prev,
+			isFavoured: !prev.isFavoured,
+			isIllFavoured: false, // Ensure ill-favoured is turned off when favoured is toggled on
+		}))
+	}
+
+	const toggleIllFavoured = () => {
+		setModalState(prev => ({
+			...prev,
+			isIllFavoured: !prev.isIllFavoured,
+			isFavoured: false, // Ensure favoured is turned off when ill-favoured is toggled on
+		}))
+	}
+
 	return {
 		...modalState,
 		openRollModal,
 		closeRollModal,
 		updateFormula,
+		toggleFavoured,
+		toggleIllFavoured,
 	}
 }
 

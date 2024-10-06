@@ -42,6 +42,10 @@ export default function Adversary() {
 		openRollModal,
 		closeRollModal,
 		updateFormula,
+		isFavoured,
+		isIllFavoured,
+		toggleFavoured,
+		toggleIllFavoured,
 	} = useRollModal()
 
 	const handleAttack = (weaponType: 'primary' | 'secondary') => {
@@ -239,7 +243,6 @@ export default function Adversary() {
 			</div>
 
 			{/* Conditionally render Fell Abilities section */}
-			{/* {(editMode === 'edit' || */}
 			{(true ||
 				fellAbilities.some(ability => ability.name || ability.description)) && (
 				<div className='space-y-2 mt-8'>
@@ -304,6 +307,10 @@ export default function Adversary() {
 				initialFormula={formula}
 				label={label}
 				updateFormula={updateFormula}
+				isFavoured={isFavoured}
+				isIllFavoured={isIllFavoured}
+				toggleFavoured={toggleFavoured}
+				toggleIllFavoured={toggleIllFavoured}
 			/>
 		</div>
 	)

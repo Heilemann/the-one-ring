@@ -8,6 +8,10 @@ interface RollModalProps {
 	initialFormula: string
 	label: string
 	updateFormula: (newFormula: string) => void
+	isFavoured: boolean
+	isIllFavoured: boolean
+	toggleFavoured: () => void
+	toggleIllFavoured: () => void
 }
 
 const RollModal: React.FC<RollModalProps> = ({
@@ -16,15 +20,35 @@ const RollModal: React.FC<RollModalProps> = ({
 	initialFormula,
 	label,
 	updateFormula,
+	isFavoured,
+	isIllFavoured,
+	toggleFavoured,
+	toggleIllFavoured,
 }) => {
 	const [formula, setFormula] = useState(initialFormula)
 	const messageToApp = useMessageToApp()
+
+	const formatFormula = (formula: string): string => {
+		return formula.replace(/\s*\+\s*/g, ' + ').trim()
+	}
 
 	useEffect(() => {
 		if (isOpen) {
 			setFormula(initialFormula)
 		}
 	}, [isOpen, initialFormula])
+
+	useEffect(() => {
+		let newFormula = formula.replace(/[12]d12(kh1?|kl1?)?/, '1d12')
+		if (isFavoured) {
+			newFormula = newFormula.replace('1d12', '2d12kh1')
+		} else if (isIllFavoured) {
+			newFormula = newFormula.replace('1d12', '2d12kl1')
+		}
+		newFormula = formatFormula(newFormula)
+		setFormula(newFormula)
+		updateFormula(newFormula)
+	}, [isFavoured, isIllFavoured, formula])
 
 	const handleRoll = () => {
 		messageToApp({
@@ -37,7 +61,7 @@ const RollModal: React.FC<RollModalProps> = ({
 	}
 
 	const addDice = () => {
-		const parts = formula.split('+')
+		const parts = formula.split('+').map(part => part.trim())
 		const d6Parts = parts.filter(part => part.includes('d6'))
 		if (d6Parts.length > 0) {
 			const lastD6Part = d6Parts[d6Parts.length - 1]
@@ -47,13 +71,13 @@ const RollModal: React.FC<RollModalProps> = ({
 		} else {
 			parts.push('1d6')
 		}
-		const newFormula = parts.join('+')
+		const newFormula = formatFormula(parts.join(' + '))
 		setFormula(newFormula)
 		updateFormula(newFormula)
 	}
 
 	const removeDice = () => {
-		const parts = formula.split('+')
+		const parts = formula.split('+').map(part => part.trim())
 		const d6Parts = parts.filter(part => part.includes('d6'))
 		if (d6Parts.length > 0) {
 			const lastD6Part = d6Parts[d6Parts.length - 1]
@@ -64,7 +88,7 @@ const RollModal: React.FC<RollModalProps> = ({
 			} else {
 				parts.splice(parts.indexOf(lastD6Part), 1)
 			}
-			const newFormula = parts.join('+')
+			const newFormula = formatFormula(parts.join(' + '))
 			setFormula(newFormula)
 			updateFormula(newFormula)
 		}
@@ -109,6 +133,26 @@ const RollModal: React.FC<RollModalProps> = ({
 					>
 						+ 1d6
 					</button>
+				</div>
+				<div className='flex justify-between items-center mb-4'>
+					<label className='flex items-center'>
+						<input
+							type='checkbox'
+							checked={isFavoured}
+							onChange={toggleFavoured}
+							className='mr-2'
+						/>
+						Favoured
+					</label>
+					<label className='flex items-center'>
+						<input
+							type='checkbox'
+							checked={isIllFavoured}
+							onChange={toggleIllFavoured}
+							className='mr-2'
+						/>
+						Ill-favoured
+					</label>
 				</div>
 				{conditions.length > 0 && (
 					<div className='mb-4'>

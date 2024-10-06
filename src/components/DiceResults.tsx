@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { twMerge } from 'tailwind-merge'
 import eye from '../assets/eye.png'
 import gandalf from '../assets/gandalf.png'
@@ -10,7 +10,7 @@ interface DiceResultsProps {
 }
 
 const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
-	const diceResult = useMemo(() => {
+	const diceResult: DiceResult | false = useMemo(() => {
 		try {
 			return JSON.parse(diceData) as DiceResult
 		} catch (error) {
@@ -18,6 +18,15 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 			return false
 		}
 	}, [diceData])
+
+	useEffect(() => {
+		if (diceResult) {
+			console.log('New roll data:', {
+				label: 'label' in diceResult ? diceResult.label : null,
+				diceResult,
+			})
+		}
+	}, [diceResult])
 
 	if (!diceResult) {
 		return <div>No valid dice data available.</div>
@@ -70,7 +79,7 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 
 	// Function to render individual rolls
 	const renderRoll = (
-		roll: { die?: number; value: number },
+		roll: { die?: number; value: number; drop?: boolean },
 		idx: number,
 		i: number,
 	) => {
@@ -87,7 +96,7 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 		const dieClass = twMerge(
 			'flex text-xl flex-col items-center justify-center',
 			dieType === 'd6' ? 'rounded-md h-6 w-6' : 'rounded-full h-7 w-7',
-			isLowOnD6Weary ? 'bg-red-800' : 'bg-white/10',
+			isLowOnD6Weary || roll.drop ? 'bg-red-800/50' : 'bg-white/10',
 			isSixOnD6 && 'bg-white text-black',
 		)
 
@@ -104,7 +113,7 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 					<div
 						className='-mt-0.5 -mr-0.5'
 						style={
-							isLowOnD6Weary
+							isLowOnD6Weary || roll.drop
 								? {
 										color: 'transparent',
 										WebkitTextStroke: '1px #ccc',
@@ -156,7 +165,8 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 
 		const adjustRolls = (item: RollResultArray | Modifier) => {
 			if (item.type === 'die') {
-				item.rolls?.forEach(roll => {
+				const keptRolls = item.rolls?.filter(roll => !roll.drop) || []
+				keptRolls.forEach(roll => {
 					let value = roll.value
 
 					// If weary and die is d6 with value 1-3, set value to 0
