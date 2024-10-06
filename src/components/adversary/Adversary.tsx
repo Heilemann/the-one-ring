@@ -30,11 +30,6 @@ export default function Adversary() {
 		name: 'description',
 	})
 
-	const attributeLevel = useWatch({
-		control,
-		name: 'attributeLevel',
-	})
-
 	const {
 		isOpen,
 		formula,
@@ -86,7 +81,7 @@ export default function Adversary() {
 			<div className='grid grid-cols-5 gap-2 items-start'>
 				<div className='col-span-5'>
 					<Input
-						className='text-xl font-bold'
+						className='text-xl font-bold text-[#ba5450]'
 						placeholder='Name...'
 						disabled={editMode === 'view'}
 						style={{
@@ -247,7 +242,7 @@ export default function Adversary() {
 				fellAbilities.some(ability => ability.name || ability.description)) && (
 				<div className='space-y-2 mt-8'>
 					{/* Header */}
-					<div className='grid grid-cols-5 gap-2'>
+					<div className=''>
 						<StyledLabel className='pb-0 col-span-2'>
 							Fell Abilities
 						</StyledLabel>
@@ -255,10 +250,11 @@ export default function Adversary() {
 					</div>
 
 					{fellAbilityFields.map((field, index) => (
-						<div key={field.id} className='grid grid-cols-5 gap-2 items-start'>
+						<div key={field.id}>
 							{/* Ability Name */}
 							<Input
-								className='col-span-2 text-black'
+								className={twMerge('text-base font-bold text-[#ba5450]')}
+								style={{ fontFamily: 'Aniron' }}
 								placeholder='—'
 								disabled={editMode === 'view'}
 								{...register(`fellAbilities.${index}.name`)}

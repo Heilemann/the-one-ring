@@ -22,7 +22,7 @@ const useRollModal = () => {
 	const openRollModal = (
 		weapon: string,
 		rating: number,
-		isFavorite: boolean,
+		isFavorite: boolean = false,
 		mod: number = 0,
 	) => {
 		setModalState({
