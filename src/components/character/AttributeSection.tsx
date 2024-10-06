@@ -34,6 +34,12 @@ const AttributeSection: React.FC<AttributeSectionProps> = ({
 
 	const rating = Number(ratingValue) || 0
 
+	const thirdInputValue = useWatch({
+		control,
+		name: `${lowerCaseTitle}.${thirdInputLabel.toLowerCase()}` as Path<ICharacter>,
+		defaultValue: 0,
+	})
+
 	return (
 		<div>
 			<MediumHeader centered>{title}</MediumHeader>
@@ -71,6 +77,21 @@ const AttributeSection: React.FC<AttributeSectionProps> = ({
 						labelClass='translate-x-5 translate-y-0'
 						{...register(
 							`${lowerCaseTitle}.${thirdInputLabel.toLowerCase()}` as Path<ICharacter>,
+							{
+								valueAsNumber: true,
+							},
+						)}
+					/>
+					<DiamondInput
+						labelBelow={true}
+						centered={true}
+						label='Current'
+						placeholder={thirdInputValue?.toString() || '—'}
+						type='number'
+						className='absolute bottom-11 -right-16'
+						labelClass='translate-x-5 translate-y-0'
+						{...register(
+							`${lowerCaseTitle}.current${thirdInputLabel}` as Path<ICharacter>,
 							{
 								valueAsNumber: true,
 							},

@@ -16,7 +16,7 @@ const Strength: React.FC = () => {
 		<AttributeSection
 			title='Strength'
 			skills={strengthSkills}
-			thirdInputLabel='Endurance'
+			thirdInputLabel='Endur.'
 		/>
 	)
 }

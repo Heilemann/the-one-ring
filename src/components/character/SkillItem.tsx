@@ -53,7 +53,7 @@ const SkillItem: React.FC<SkillItemProps> = ({
 			name,
 			skillRating,
 			Boolean(isFavorite),
-			0, // Set initial modifier to 0
+			0,
 			attributeTargetNumber,
 		)
 	}
