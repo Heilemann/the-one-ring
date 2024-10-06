@@ -14,6 +14,8 @@ interface RollModalProps {
 	toggleIllFavoured: () => void
 	modifier: number
 	setModifier: (value: number) => void
+	targetNumber: number | null
+	setTargetNumber: (value: number | null) => void
 }
 
 const RollModal: React.FC<RollModalProps> = ({
@@ -28,12 +30,24 @@ const RollModal: React.FC<RollModalProps> = ({
 	toggleIllFavoured,
 	modifier,
 	setModifier,
+	targetNumber,
+	setTargetNumber,
 }) => {
 	const [formula, setFormula] = useState(initialFormula)
 	const messageToApp = useMessageToApp()
 
 	const formatFormula = (formula: string): string => {
-		return formula.replace(/\s*\+\s*/g, ' + ').trim()
+		const parts = formula.split('>').map(part => part.trim())
+		const basePart = parts[0].replace(/\s*\+\s*/g, ' + ').trim()
+		return parts.length > 1 ? `${basePart} > ${parts[1]}` : basePart
+	}
+
+	const updateFormulaWithTargetNumber = (
+		formula: string,
+		targetNumber: number | null,
+	) => {
+		const baseParts = formula.split('>')[0].trim()
+		return targetNumber ? `${baseParts} > ${targetNumber}` : baseParts
 	}
 
 	useEffect(() => {
@@ -50,9 +64,10 @@ const RollModal: React.FC<RollModalProps> = ({
 			newFormula = newFormula.replace('1d12', '2d12kl1')
 		}
 		newFormula = formatFormula(newFormula)
+		newFormula = updateFormulaWithTargetNumber(newFormula, targetNumber)
 		setFormula(newFormula)
 		updateFormula(newFormula)
-	}, [isFavoured, isIllFavoured, formula])
+	}, [isFavoured, isIllFavoured, formula, targetNumber])
 
 	const handleRoll = () => {
 		messageToApp({
@@ -64,38 +79,49 @@ const RollModal: React.FC<RollModalProps> = ({
 		onClose()
 	}
 
+	const extractD6Count = (formula: string): number => {
+		const match = formula.match(/(\d+)d6/)
+		return match ? parseInt(match[1], 10) : 0
+	}
+
 	const addDice = () => {
-		const parts = formula.split('+').map(part => part.trim())
-		const d6Parts = parts.filter(part => part.includes('d6'))
-		if (d6Parts.length > 0) {
-			const lastD6Part = d6Parts[d6Parts.length - 1]
-			const [count] = lastD6Part.split('d')
-			const newCount = parseInt(count) + 1
-			parts[parts.indexOf(lastD6Part)] = `${newCount}d6`
+		const [basePart, targetPart] = formula.split('>')
+		const d6Count = extractD6Count(basePart)
+		let newBasePart: string
+
+		if (d6Count > 0) {
+			const newD6Count = d6Count + 1
+			newBasePart = basePart.replace(/(\d+)d6/, `${newD6Count}d6`)
 		} else {
-			parts.push('1d6')
+			newBasePart = `${basePart} + 1d6`
 		}
-		const newFormula = formatFormula(parts.join(' + '))
+
+		const newFormula = targetPart
+			? `${newBasePart.trim()} > ${targetPart.trim()}`
+			: newBasePart.trim()
 		setFormula(newFormula)
 		updateFormula(newFormula)
 	}
 
 	const removeDice = () => {
-		const parts = formula.split('+').map(part => part.trim())
-		const d6Parts = parts.filter(part => part.includes('d6'))
-		if (d6Parts.length > 0) {
-			const lastD6Part = d6Parts[d6Parts.length - 1]
-			const [count] = lastD6Part.split('d')
-			const newCount = parseInt(count) - 1
-			if (newCount > 0) {
-				parts[parts.indexOf(lastD6Part)] = `${newCount}d6`
-			} else {
-				parts.splice(parts.indexOf(lastD6Part), 1)
-			}
-			const newFormula = formatFormula(parts.join(' + '))
-			setFormula(newFormula)
-			updateFormula(newFormula)
+		const [basePart, targetPart] = formula.split('>')
+		const d6Count = extractD6Count(basePart)
+		let newBasePart: string
+
+		if (d6Count > 1) {
+			const newD6Count = d6Count - 1
+			newBasePart = basePart.replace(/(\d+)d6/, `${newD6Count}d6`)
+		} else if (d6Count === 1) {
+			newBasePart = basePart.replace(/\+?\s*1d6/, '').trim()
+		} else {
+			newBasePart = basePart
 		}
+
+		const newFormula = targetPart
+			? `${newBasePart.trim()} > ${targetPart.trim()}`
+			: newBasePart.trim()
+		setFormula(newFormula)
+		updateFormula(newFormula)
 	}
 
 	// Extract conditions and main label text
@@ -108,8 +134,8 @@ const RollModal: React.FC<RollModalProps> = ({
 		const newModifier = parseInt(e.target.value) || 0
 		setModifier(newModifier)
 
-		// Update the formula with the new modifier
-		const formulaParts = formula.split('+').map(part => part.trim())
+		const [basePart, targetPart] = formula.split('>')
+		const formulaParts = basePart.split('+').map(part => part.trim())
 		const lastPart = formulaParts[formulaParts.length - 1]
 
 		if (lastPart.match(/^-?\d+$/)) {
@@ -120,9 +146,20 @@ const RollModal: React.FC<RollModalProps> = ({
 			formulaParts.push(newModifier.toString())
 		}
 
-		const newFormula = formatFormula(formulaParts.join(' + '))
+		const newBasePart = formulaParts.join(' + ').trim()
+		const newFormula = targetPart
+			? `${newBasePart} > ${targetPart.trim()}`
+			: newBasePart
 		setFormula(newFormula)
 		updateFormula(newFormula)
+	}
+
+	const handleTargetNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const newTarget = e.target.value === '' ? null : parseInt(e.target.value)
+		setTargetNumber(newTarget)
+		const updatedFormula = updateFormulaWithTargetNumber(formula, newTarget)
+		setFormula(updatedFormula)
+		updateFormula(updatedFormula)
 	}
 
 	return (
@@ -187,6 +224,16 @@ const RollModal: React.FC<RollModalProps> = ({
 							value={modifier}
 							onChange={handleModifierChange}
 							className='ml-2 w-16 p-1 border rounded'
+						/>
+					</label>
+					<label className='flex items-center'>
+						Target Number:
+						<input
+							type='number'
+							value={targetNumber === null ? '' : targetNumber}
+							onChange={handleTargetNumberChange}
+							className='ml-2 w-16 p-1 border rounded'
+							placeholder='Optional'
 						/>
 					</label>
 				</div>

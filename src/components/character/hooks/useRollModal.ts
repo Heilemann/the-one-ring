@@ -6,6 +6,7 @@ interface RollModalState {
 	label: string
 	isFavoured: boolean
 	isIllFavoured: boolean
+	targetNumber: number | null
 }
 
 const useRollModal = () => {
@@ -15,22 +16,26 @@ const useRollModal = () => {
 		label: '',
 		isFavoured: false,
 		isIllFavoured: false,
+		targetNumber: null,
 	})
 
 	const [modifier, setModifier] = useState(0)
 
 	const openRollModal = (
-		weapon: string,
+		name: string,
 		rating: number,
 		isFavorite: boolean = false,
 		mod: number = 0,
+		target: number | null = null,
 	) => {
+		const baseFormula = `1d12 + ${Math.max(1, rating)}d6${mod !== 0 ? ` + ${mod}` : ''}`
 		setModalState({
 			isOpen: true,
-			formula: `${isFavorite ? '2d12kh1' : '1d12'} + ${rating}${mod !== 0 ? ` + ${mod}` : ''}`,
-			label: `${weapon.charAt(0).toUpperCase() + weapon.slice(1)} (${rating})`,
+			formula: baseFormula,
+			label: `${name}${rating > 0 ? ` (${rating})` : ''}${target !== null ? ` > ${target}` : ''}`,
 			isFavoured: isFavorite,
 			isIllFavoured: false,
+			targetNumber: target,
 		})
 		setModifier(mod)
 	}
@@ -47,7 +52,7 @@ const useRollModal = () => {
 		setModalState(prev => ({
 			...prev,
 			isFavoured: !prev.isFavoured,
-			isIllFavoured: false, // Ensure ill-favoured is turned off when favoured is toggled on
+			isIllFavoured: false,
 		}))
 	}
 
@@ -55,8 +60,12 @@ const useRollModal = () => {
 		setModalState(prev => ({
 			...prev,
 			isIllFavoured: !prev.isIllFavoured,
-			isFavoured: false, // Ensure favoured is turned off when ill-favoured is toggled on
+			isFavoured: false,
 		}))
+	}
+
+	const setTargetNumber = (target: number | null) => {
+		setModalState(prev => ({ ...prev, targetNumber: target }))
 	}
 
 	return {
@@ -68,6 +77,7 @@ const useRollModal = () => {
 		toggleIllFavoured,
 		modifier,
 		setModifier,
+		setTargetNumber,
 	}
 }
 

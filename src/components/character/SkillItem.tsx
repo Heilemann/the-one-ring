@@ -41,10 +41,21 @@ const SkillItem: React.FC<SkillItemProps> = ({
 		isIllFavoured,
 		toggleFavoured,
 		toggleIllFavoured,
+		modifier,
+		setModifier,
+		targetNumber,
+		setTargetNumber,
 	} = useRollModal()
 
 	const handleOpenRollModal = () => {
-		openRollModal(name, Number(rating), isFavorite)
+		const skillRating = Number(rating) || 0
+		openRollModal(
+			name,
+			skillRating,
+			Boolean(isFavorite),
+			0, // Set initial modifier to 0
+			attributeTargetNumber,
+		)
 	}
 
 	return (
@@ -75,6 +86,10 @@ const SkillItem: React.FC<SkillItemProps> = ({
 				isIllFavoured={isIllFavoured}
 				toggleFavoured={toggleFavoured}
 				toggleIllFavoured={toggleIllFavoured}
+				modifier={modifier}
+				setModifier={setModifier}
+				targetNumber={targetNumber}
+				setTargetNumber={setTargetNumber}
 			/>
 		</div>
 	)

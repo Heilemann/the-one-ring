@@ -84,7 +84,6 @@ const AttributeSection: React.FC<AttributeSectionProps> = ({
 			<SkillsSection
 				title={title}
 				skills={skills}
-				// Ensure 'attributeTargetNumber' is a number
 				attributeTargetNumber={Number(targetNumber) || 0}
 			/>
 		</div>

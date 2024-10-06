@@ -34,7 +34,7 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 
 	// Function to render individual dice or modifiers
 	const renderDice = () => {
-		if (diceResult.type === 'expressionroll') {
+		if (diceResult && diceResult.type === 'expressionroll') {
 			return diceResult.dice.map((die, idx) => (
 				<React.Fragment key={idx}>
 					{/* Render operator before each die except the first */}
@@ -46,7 +46,10 @@ const DiceResults: React.FC<DiceResultsProps> = ({ diceData }) => {
 					{renderDieOrModifier(die, idx)}
 				</React.Fragment>
 			))
-		} else if (diceResult.type === 'die' || diceResult.type === 'number') {
+		} else if (
+			diceResult &&
+			(diceResult.type === 'die' || diceResult.type === 'number')
+		) {
 			return renderDieOrModifier(diceResult as RollResultArray | Modifier, 0)
 		}
 		return null

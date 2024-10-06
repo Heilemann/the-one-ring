@@ -30,13 +30,21 @@ const CombatProficiencies: React.FC = () => {
 		toggleIllFavoured,
 		modifier,
 		setModifier,
+		targetNumber,
+		setTargetNumber,
 	} = useRollModal()
 
 	const handleOpenRollModal = (weapon: WeaponType, rating: number) => {
 		const isFavorite = control._getWatch(
 			`combatProficiencies.${weapon}.favorite` as CombatProficiencyName,
 		)
-		openRollModal(weapon, rating, isFavorite) // Remove the modifier argument
+		openRollModal(
+			weapon.charAt(0).toUpperCase() + weapon.slice(1),
+			rating,
+			isFavorite,
+			modifier,
+			null,
+		)
 	}
 
 	return (
@@ -59,42 +67,38 @@ const CombatProficiencies: React.FC = () => {
 				{weaponList.map(weapon => {
 					const rating = useWatch({
 						control,
-						name: `combatProficiencies.${weapon}.rating` as CombatProficiencyName,
+						name: `combatProficiencies.${weapon}.rating`,
 						defaultValue: 0,
 					})
 					const isFavorite = useWatch({
 						control,
-						name: `combatProficiencies.${weapon}.favorite` as CombatProficiencyName,
+						name: `combatProficiencies.${weapon}.favorite`,
 						defaultValue: false,
 					})
 					return (
 						<div key={weapon} className='flex items-center space-x-2 space-y-3'>
 							<Controller
-								name={
-									`combatProficiencies.${weapon}.favorite` as CombatProficiencyName
-								}
+								name={`combatProficiencies.${weapon}.favorite`}
 								control={control}
 								defaultValue={false}
 								render={({ field }) => (
 									<input
 										type='checkbox'
-										checked={field.value as boolean}
+										checked={field.value}
 										onChange={e => field.onChange(e.target.checked)}
 									/>
 								)}
 							/>
 							<label
 								className='text-black grow w-full cursor-pointer hover:underline'
-								onClick={() => handleOpenRollModal(weapon, rating as number)}
+								onClick={() => handleOpenRollModal(weapon, rating)}
 								style={{ marginTop: '0px' }}
 							>
 								{weapon.charAt(0).toUpperCase() + weapon.slice(1)}
 							</label>
 
 							<Controller
-								name={
-									`combatProficiencies.${weapon}.rating` as CombatProficiencyName
-								}
+								name={`combatProficiencies.${weapon}.rating`}
 								control={control}
 								defaultValue={0}
 								render={({ field }) => (
@@ -120,6 +124,8 @@ const CombatProficiencies: React.FC = () => {
 				toggleIllFavoured={toggleIllFavoured}
 				modifier={modifier}
 				setModifier={setModifier}
+				targetNumber={targetNumber}
+				setTargetNumber={setTargetNumber}
 			/>
 		</div>
 	)

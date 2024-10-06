@@ -10,11 +10,16 @@ export interface SkillListItem {
 }
 
 interface SkillsSectionProps {
-	title: 'Strength' | 'Heart' | 'Wits'
+	title: string
 	skills: SkillListItem[]
+	attributeTargetNumber: number
 }
 
-const SkillsSection: React.FC<SkillsSectionProps> = ({ title, skills }) => {
+const SkillsSection: React.FC<SkillsSectionProps> = ({
+	title,
+	skills,
+	attributeTargetNumber,
+}) => {
 	const { control } = useFormContext<ICharacter>()
 	const lowerCaseTitle = title.toLowerCase() as keyof ICharacter
 

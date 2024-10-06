@@ -41,6 +41,10 @@ export default function Adversary() {
 		isIllFavoured,
 		toggleFavoured,
 		toggleIllFavoured,
+		modifier,
+		setModifier,
+		targetNumber,
+		setTargetNumber,
 	} = useRollModal()
 
 	const handleAttack = (weaponType: 'primary' | 'secondary') => {
@@ -50,7 +54,6 @@ export default function Adversary() {
 		const rating = control._getWatch(
 			`combatProficiencies.${weaponType}.rating`,
 		) as number
-		console.log(`Attacking with ${name}, rating: ${rating}`) // Debug log
 		openRollModal(name, rating)
 	}
 
@@ -242,12 +245,7 @@ export default function Adversary() {
 				fellAbilities.some(ability => ability.name || ability.description)) && (
 				<div className='space-y-2 mt-8'>
 					{/* Header */}
-					<div className=''>
-						<StyledLabel className='pb-0 col-span-2'>
-							Fell Abilities
-						</StyledLabel>
-						<StyledLabel className='pb-0 col-span-3'>Description</StyledLabel>
-					</div>
+					<StyledLabel className='pb-0 col-span-2'>Fell Abilities</StyledLabel>
 
 					{fellAbilityFields.map((field, index) => (
 						<div key={field.id}>
@@ -307,6 +305,10 @@ export default function Adversary() {
 				isIllFavoured={isIllFavoured}
 				toggleFavoured={toggleFavoured}
 				toggleIllFavoured={toggleIllFavoured}
+				modifier={modifier}
+				setModifier={setModifier}
+				targetNumber={targetNumber}
+				setTargetNumber={setTargetNumber}
 			/>
 		</div>
 	)
