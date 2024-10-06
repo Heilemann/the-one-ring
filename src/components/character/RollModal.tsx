@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import useMessageToApp from '../BaseComponents/hooks/UseMessageToApp'
 
@@ -98,11 +98,44 @@ const RollModal: React.FC<RollModalProps> = ({
 	const conditions = label.match(/--(\w+)/g)?.map(c => c.slice(2)) || []
 	const mainLabel = label.replace(/--\w+/g, '').trim()
 
+	// Handle Escape key press
+	const handleKeyDown = useCallback(
+		(event: KeyboardEvent) => {
+			if (event.key === 'Escape') {
+				onClose()
+			}
+		},
+		[onClose],
+	)
+
+	// Add and remove event listeners for Escape key
+	useEffect(() => {
+		if (isOpen) {
+			document.addEventListener('keydown', handleKeyDown)
+		}
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown)
+		}
+	}, [isOpen, handleKeyDown])
+
+	// Handle click outside modal
+	const handleOutsideClick = (event: React.MouseEvent<HTMLDivElement>) => {
+		if (event.target === event.currentTarget) {
+			onClose()
+		}
+	}
+
 	if (!isOpen) return null
 
 	return (
-		<div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-			<div className='bg-white p-6 rounded-lg'>
+		<div
+			className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'
+			onClick={handleOutsideClick}
+		>
+			<div
+				className='bg-white p-6 rounded-lg'
+				onClick={e => e.stopPropagation()}
+			>
 				<h2
 					className={twMerge('text-base font-bold text-[#ba5450] mb-4')}
 					style={{ fontFamily: 'Aniron' }}

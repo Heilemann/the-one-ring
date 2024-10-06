@@ -55,7 +55,10 @@ const CombatProficiencies: React.FC = () => {
 	} = useRollModal()
 
 	const handleOpenRollModal = (weapon: string, rating: number) => {
-		openRollModal(weapon, rating)
+		const isFavorite = control._getWatch(
+			`combatProficiencies.${weapon}.favorite`,
+		)
+		openRollModal(weapon, rating, isFavorite)
 	}
 
 	return (
@@ -69,11 +72,21 @@ const CombatProficiencies: React.FC = () => {
 						name: `combatProficiencies.${weapon}.rating`,
 						defaultValue: 0,
 					})
+					const isFavorite = useWatch({
+						control,
+						name: `combatProficiencies.${weapon}.favorite`,
+						defaultValue: false,
+					})
 					return (
 						<div key={weapon} className='flex items-center space-x-2 space-y-3'>
+							<input
+								type='checkbox'
+								{...control.register(`combatProficiencies.$weapon}.favorite`)}
+							/>
 							<label
 								className='text-black grow w-full cursor-pointer hover:underline'
 								onClick={() => handleOpenRollModal(weapon, rating)}
+								style={{ marginTop: '0px' }}
 							>
 								{weapon.charAt(0).toUpperCase() + weapon.slice(1)}
 							</label>

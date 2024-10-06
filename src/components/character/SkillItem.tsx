@@ -24,21 +24,9 @@ const SkillItem: React.FC<SkillItemProps> = ({
 		defaultValue: 0,
 	})
 
-	const isWeary = useWatch({
+	const isFavorite = useWatch({
 		control,
-		name: 'conditions.weary',
-		defaultValue: false,
-	})
-
-	const isMiserable = useWatch({
-		control,
-		name: 'conditions.miserable',
-		defaultValue: false,
-	})
-
-	const isWounded = useWatch({
-		control,
-		name: 'conditions.wounded',
+		name: `${path}.favorite` as Path<ICharacter>,
 		defaultValue: false,
 	})
 
@@ -56,7 +44,7 @@ const SkillItem: React.FC<SkillItemProps> = ({
 	} = useRollModal()
 
 	const handleOpenRollModal = () => {
-		openRollModal(name, Number(rating))
+		openRollModal(name, Number(rating), isFavorite)
 	}
 
 	return (

@@ -17,7 +17,11 @@ const useRollModal = () => {
 		isIllFavoured: false,
 	})
 
-	const openRollModal = (name: string, rating: number) => {
+	const openRollModal = (
+		name: string,
+		rating: number,
+		isFavoured: boolean = false,
+	) => {
 		const ratingNumber = Number(rating) || 0
 		const diceExpression = ratingNumber > 0 ? `1d12+${ratingNumber}d6` : '1d12'
 
@@ -25,7 +29,7 @@ const useRollModal = () => {
 			isOpen: true,
 			formula: diceExpression,
 			label: `${name}`,
-			isFavoured: false,
+			isFavoured: isFavoured,
 			isIllFavoured: false,
 		})
 	}
