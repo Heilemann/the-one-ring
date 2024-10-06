@@ -82,21 +82,6 @@ const AttributeSection: React.FC<AttributeSectionProps> = ({
 							},
 						)}
 					/>
-					<DiamondInput
-						labelBelow={true}
-						centered={true}
-						label='Current'
-						placeholder={thirdInputValue?.toString() || '—'}
-						type='number'
-						className='absolute bottom-11 -right-16'
-						labelClass='translate-x-5 translate-y-0'
-						{...register(
-							`${lowerCaseTitle}.current${thirdInputLabel}` as Path<ICharacter>,
-							{
-								valueAsNumber: true,
-							},
-						)}
-					/>
 				</div>
 			</div>
 
