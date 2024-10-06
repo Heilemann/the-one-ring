@@ -79,9 +79,17 @@ const CombatProficiencies: React.FC = () => {
 					})
 					return (
 						<div key={weapon} className='flex items-center space-x-2 space-y-3'>
-							<input
-								type='checkbox'
-								{...control.register(`combatProficiencies.$weapon}.favorite`)}
+							<Controller
+								name={`combatProficiencies.${weapon}.favorite`}
+								control={control}
+								defaultValue={false}
+								render={({ field }) => (
+									<input
+										type='checkbox'
+										checked={field.value}
+										onChange={e => field.onChange(e.target.checked)}
+									/>
+								)}
 							/>
 							<label
 								className='text-black grow w-full cursor-pointer hover:underline'
