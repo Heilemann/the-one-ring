@@ -75,16 +75,6 @@
 			"canAssumeAsCharacter": "false"
 		},
 		{
-			"type": "effect",
-			"singularName": "Effect",
-			"pluralName": "Effects",
-			"description": "Various effects and conditions.",
-			"hasEditMode": "true",
-			"windowSize": "small",
-			"allowCreate": "true",
-			"canAssumeAsCharacter": "false"
-		},
-		{
 			"type": "equipment",
 			"singularName": "Equipment",
 			"pluralName": "Equipment",
