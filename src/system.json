@@ -96,7 +96,8 @@
 				"portrait",
 				"token"
 			],
-			"canAssumeAsCharacter": "false"
+			"canAssumeAsCharacter": "false",
+			"isUnique": "false"
 		}
 	],
 	"chatMessageTypes": [
