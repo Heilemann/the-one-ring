@@ -80,6 +80,7 @@ export interface ICharacter {
 
 interface CombatProficiency {
 	rating: number
+	favoured: boolean
 }
 
 export interface Skill {

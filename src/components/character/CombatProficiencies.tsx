@@ -12,7 +12,7 @@ type WeaponType = (typeof weaponList)[number]
 
 type CombatProficiencyName = `combatProficiencies.${WeaponType}.${
 	| 'rating'
-	| 'favorite'}`
+	| 'favoured'}`
 
 const CombatProficiencies: React.FC = () => {
 	const { control } = useFormContext<ICharacter>()
@@ -34,15 +34,40 @@ const CombatProficiencies: React.FC = () => {
 		setTargetNumber,
 	} = useRollModal()
 
+	const currentStance = useWatch({
+		control,
+		name: 'combatStance',
+		defaultValue: 'open',
+	})
+
 	const handleOpenRollModal = (weapon: WeaponType, rating: number) => {
-		const isFavorite = control._getWatch(
-			`combatProficiencies.${weapon}.favorite` as CombatProficiencyName,
+		const isFavoured = control._getWatch(
+			`combatProficiencies.${weapon}.favoured` as CombatProficiencyName,
 		)
+
+		let successDiceModifier = 0
+		switch (currentStance) {
+			case 'forward':
+				successDiceModifier = 1 // Add 1 success die (d6)
+				break
+			case 'defensive':
+				// For defensive stance, we'll subtract 1 success die per engaging opponent
+				// Note: This should be handled dynamically based on number of engaging opponents
+				successDiceModifier = -1 // Remove 1 success die (d6)
+				break
+			default:
+				successDiceModifier = 0
+				break
+		}
+
+		// Adjust the rating directly to modify number of d6s
+		const adjustedRating = Math.max(0, rating + successDiceModifier)
+
 		openRollModal(
 			weapon.charAt(0).toUpperCase() + weapon.slice(1),
-			rating,
-			isFavorite,
-			modifier,
+			adjustedRating,
+			isFavoured,
+			modifier, // Keep any other modifiers separate from stance effects
 			null,
 		)
 	}
@@ -70,15 +95,10 @@ const CombatProficiencies: React.FC = () => {
 						name: `combatProficiencies.${weapon}.rating`,
 						defaultValue: 0,
 					})
-					const isFavorite = useWatch({
-						control,
-						name: `combatProficiencies.${weapon}.favorite`,
-						defaultValue: false,
-					})
 					return (
 						<div key={weapon} className='flex items-center space-x-2 space-y-3'>
 							<Controller
-								name={`combatProficiencies.${weapon}.favorite`}
+								name={`combatProficiencies.${weapon}.favoured`}
 								control={control}
 								defaultValue={false}
 								render={({ field }) => (
