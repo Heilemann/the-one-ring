@@ -31,6 +31,7 @@ const useRollModal = () => {
 		const baseFormula = `1d12${rating > 0 ? ` + ${rating}d6` : ''}${mod !== 0 ? ` + ${mod}` : ''}`
 		const formulaWithTarget =
 			target !== null ? `${baseFormula} > ${target}` : baseFormula
+
 		setModalState({
 			isOpen: true,
 			formula: formulaWithTarget,

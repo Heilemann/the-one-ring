@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { twMerge } from 'tailwind-merge'
 import useMessageToApp from '../BaseComponents/hooks/UseMessageToApp'
 
@@ -33,14 +33,7 @@ const RollModal: React.FC<RollModalProps> = ({
 	targetNumber,
 	setTargetNumber,
 }) => {
-	const [formula, setFormula] = useState(initialFormula)
 	const messageToApp = useMessageToApp()
-
-	const formatFormula = (formula: string): string => {
-		const parts = formula.split('>').map(part => part.trim())
-		const basePart = parts[0].replace(/\s*\+\s*/g, ' + ').trim()
-		return parts.length > 1 ? `${basePart} > ${parts[1]}` : basePart
-	}
 
 	const updateFormulaWithTargetNumber = (
 		formula: string,
@@ -51,29 +44,27 @@ const RollModal: React.FC<RollModalProps> = ({
 	}
 
 	useEffect(() => {
-		if (isOpen) {
-			setFormula(initialFormula)
-		}
-	}, [isOpen, initialFormula])
+		if (!initialFormula) return
 
-	useEffect(() => {
-		let newFormula = formula.replace(/[12]d12(kh1?|kl1?)?/, '1d12')
-		if (isFavoured) {
-			newFormula = newFormula.replace('1d12', '2d12kh1')
-		} else if (isIllFavoured) {
-			newFormula = newFormula.replace('1d12', '2d12kl1')
+		let newFormula = initialFormula
+
+		if (isFavoured || isIllFavoured) {
+			newFormula = newFormula.replace(
+				/[12]d12(kh1?|kl1?)?/,
+				isFavoured ? '2d12kh1' : '2d12kl1',
+			)
 		}
-		newFormula = formatFormula(newFormula)
-		newFormula = updateFormulaWithTargetNumber(newFormula, targetNumber)
-		setFormula(newFormula)
-		updateFormula(newFormula)
-	}, [isFavoured, isIllFavoured, formula, targetNumber])
+
+		if (newFormula !== initialFormula) {
+			updateFormula(newFormula)
+		}
+	}, [isFavoured, isIllFavoured, initialFormula])
 
 	const handleRoll = () => {
 		messageToApp({
 			message: 'send message',
 			data: {
-				payload: `/roll ${formula} ${label}`,
+				payload: `/roll ${initialFormula} ${label}`,
 			},
 		})
 		onClose()
@@ -85,7 +76,7 @@ const RollModal: React.FC<RollModalProps> = ({
 	}
 
 	const addDice = () => {
-		const [basePart, targetPart] = formula.split('>')
+		const [basePart, targetPart] = initialFormula.split('>')
 		const d6Count = extractD6Count(basePart)
 		let newBasePart: string
 
@@ -99,12 +90,11 @@ const RollModal: React.FC<RollModalProps> = ({
 		const newFormula = targetPart
 			? `${newBasePart.trim()} > ${targetPart.trim()}`
 			: newBasePart.trim()
-		setFormula(newFormula)
 		updateFormula(newFormula)
 	}
 
 	const removeDice = () => {
-		const [basePart, targetPart] = formula.split('>')
+		const [basePart, targetPart] = initialFormula.split('>')
 		const d6Count = extractD6Count(basePart)
 		let newBasePart: string
 
@@ -120,11 +110,9 @@ const RollModal: React.FC<RollModalProps> = ({
 		const newFormula = targetPart
 			? `${newBasePart.trim()} > ${targetPart.trim()}`
 			: newBasePart.trim()
-		setFormula(newFormula)
 		updateFormula(newFormula)
 	}
 
-	// Extract conditions and main label text
 	const conditions = label.match(/--(\w+)/g)?.map(c => c.slice(2)) || []
 	const mainLabel = label.replace(/--\w+/g, '').trim()
 
@@ -134,7 +122,7 @@ const RollModal: React.FC<RollModalProps> = ({
 		const newModifier = parseInt(e.target.value) || 0
 		setModifier(newModifier)
 
-		const [basePart, targetPart] = formula.split('>')
+		const [basePart, targetPart] = initialFormula.split('>')
 		const formulaParts = basePart.split('+').map(part => part.trim())
 		const lastPart = formulaParts[formulaParts.length - 1]
 
@@ -150,15 +138,16 @@ const RollModal: React.FC<RollModalProps> = ({
 		const newFormula = targetPart
 			? `${newBasePart} > ${targetPart.trim()}`
 			: newBasePart
-		setFormula(newFormula)
 		updateFormula(newFormula)
 	}
 
 	const handleTargetNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newTarget = e.target.value === '' ? null : parseInt(e.target.value)
 		setTargetNumber(newTarget)
-		const updatedFormula = updateFormulaWithTargetNumber(formula, newTarget)
-		setFormula(updatedFormula)
+		const updatedFormula = updateFormulaWithTargetNumber(
+			initialFormula,
+			newTarget,
+		)
 		updateFormula(updatedFormula)
 	}
 
@@ -173,11 +162,8 @@ const RollModal: React.FC<RollModalProps> = ({
 				</h2>
 				<input
 					type='text'
-					value={formula}
-					onChange={e => {
-						setFormula(e.target.value)
-						updateFormula(e.target.value)
-					}}
+					value={initialFormula}
+					onChange={e => updateFormula(e.target.value)}
 					className='w-full p-2 border rounded mb-4'
 				/>
 				<div className='flex justify-between items-center mb-4'>
