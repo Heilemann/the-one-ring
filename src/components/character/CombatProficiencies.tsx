@@ -76,18 +76,6 @@ const CombatProficiencies: React.FC = () => {
 		<div>
 			<MediumHeader>Combat Proficiencies</MediumHeader>
 			<CombatStanceSelector />
-			<div className='mb-4'>
-				<label htmlFor='modifier' className='mr-2'>
-					Roll Modifier:
-				</label>
-				<input
-					type='number'
-					id='modifier'
-					value={modifier}
-					onChange={e => setModifier(parseInt(e.target.value) || 0)}
-					className='w-16 px-2 py-1 border rounded'
-				/>
-			</div>
 			<div>
 				{weaponList.map(weapon => {
 					const rating = useWatch({

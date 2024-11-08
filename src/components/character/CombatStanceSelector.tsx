@@ -37,11 +37,11 @@ const CombatStanceSelector: React.FC = () => {
 function getStanceDescription(stance: string): string {
 	switch (stance) {
 		case 'forward':
-			return 'Add 1 success die (d6) to attack rolls. Enemies add 1 success die to close combat attacks against you.'
+			return 'Attack rolls gain +1d. Close combat attacks aimed at you gain +1d.'
 		case 'open':
-			return 'No additional or fewer success dice.'
+			return 'No advantage or disadvantage.'
 		case 'defensive':
-			return 'Remove 1 success die (d6) from close combat attacks against you. Remove 1 success die from your attack rolls for each opponent engaging you.'
+			return 'Close combat attacks aimed at you lose -1d. Attack rolls lose -1d for each opponent engaging you.'
 		case 'rearward':
 			return 'You can attack adversaries using only ranged weapons, and only be targeted by attackers using similar weapons.'
 		default:
