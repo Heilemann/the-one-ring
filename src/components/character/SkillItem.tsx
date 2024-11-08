@@ -1,9 +1,9 @@
 import React from 'react'
 import { Path, useFormContext, useWatch } from 'react-hook-form'
+import useRollModal from '../../hooks/useRollModal'
 import { ICharacter } from '../../interfaces/character'
 import CheckboxRating from '../CheckboxRating'
 import RollModal from './RollModal'
-import useRollModal from './hooks/useRollModal'
 
 export interface SkillItemProps {
 	name: string

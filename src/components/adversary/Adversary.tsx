@@ -2,6 +2,7 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import bottomborder from '../../assets/bottomborder.png'
 import { useEditMode } from '../../hooks/useEditMode'
+import useRollModal from '../../hooks/useRollModal'
 import { IAdversary } from '../../interfaces/adversary'
 import Asset from '../BaseComponents/Asset'
 import StyledLabel from '../BaseComponents/Form/StyledLabel'
@@ -9,7 +10,6 @@ import TextArea from '../BaseComponents/Form/Textarea'
 import DiamondInput from '../DiamondInput'
 import Input from '../Input'
 import RollModal from '../character/RollModal'
-import useRollModal from '../character/hooks/useRollModal'
 
 export default function Adversary() {
 	const editMode = useEditMode()

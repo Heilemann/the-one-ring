@@ -1,11 +1,11 @@
 import React from 'react'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
+import useRollModal from '../../hooks/useRollModal'
 import { ICharacter } from '../../interfaces/character'
 import MediumHeader from '../BaseComponents/MediumHeader'
 import CheckboxRating from '../CheckboxRating'
 import CombatStanceSelector from './CombatStanceSelector'
 import RollModal from './RollModal'
-import useRollModal from './hooks/useRollModal'
 
 const weaponList = ['axes', 'bows', 'spears', 'swords'] as const
 type WeaponType = (typeof weaponList)[number]
